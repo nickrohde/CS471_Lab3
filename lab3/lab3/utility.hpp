@@ -41,11 +41,11 @@ typedef std::chrono::high_resolution_clock				highRes_Clock;
 /// <param name="p_MAX">Pointer to the maximum value of the range.</param>
 /// <returns>A random number between <paramref name="p_MIN"/> and <paramref name="p_MAX"/> (both inclusive).</returns>
 template <typename T>
-inline T getRandomNumberInRange(const T* p_MIN, const T* p_MAX)
+inline T getRandomNumberInRange(const T p_MIN, const T p_MAX)
 {
 	static std::random_device rd{};
 	static std::mt19937 engine{ rd() };
-	std::uniform_real_distribution<T> dist{ *p_MIN, *p_MAX };
+	std::uniform_real_distribution<T> dist{ p_MIN, p_MAX };
 
 	return dist(engine);
 } // end template getRandomNumberInRange
@@ -57,7 +57,7 @@ inline T getRandomNumberInRange(const T* p_MIN, const T* p_MAX)
 /// <param name="p_MAX">Pointer to the maximum value of the range.</param>
 /// <returns>A vector containing <paramref name="ui_SIZE"/> random numbers between <paramref name="p_MIN"/> and <paramref name="p_MAX"/> (both inclusive).</returns>
 template <typename T>
-std::vector<T>* getRandomVector(const std::size_t ui_SIZE, const T* p_MIN, const T* p_MAX)
+std::vector<T>* getRandomVector(const std::size_t ui_SIZE, const T p_MIN, const T p_MAX)
 {
 	std::vector<T>* vec = new std::vector<T>(ui_SIZE);
 
