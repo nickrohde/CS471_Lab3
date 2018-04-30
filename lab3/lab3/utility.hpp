@@ -29,6 +29,7 @@
 #define NULL 0
 #endif
 
+
 /// <summary>Typedefs for convenience.</summary>
 typedef unsigned int uint;
 typedef std::chrono::high_resolution_clock::time_point	timePoint;
@@ -50,6 +51,7 @@ inline T getRandomNumberInRange(const T p_MIN, const T p_MAX)
 	return dist(engine);
 } // end template getRandomNumberInRange
 
+
 /// <summary>Gets a vector of specified size with random values.</summary>
 /// <typeparam name="T">Type that the mersenne twister can generate.</typeparam>
 /// <param name="ui_SIZE">Size of the vector.</param>
@@ -68,6 +70,25 @@ std::vector<T>* getRandomVector(const std::size_t ui_SIZE, const T p_MIN, const 
 
 	return vec;
 } // end template getRandomVector
+
+
+  /// <summary>Gets a vector of size <paramref name=ui_LENGTH"/> that contains a random binary string.</summary>
+  /// <typeparam name="T">A numeric type that implements operator%.</typeparam>
+  /// <param name="ui_LENGTH">The number of 'bits' to generate.</param>
+  /// <returns>A pointer to a vector containing a random binary string.</returns>
+template <typename T>
+inline std::vector<T>* getRandomBinaryString(std::size_t ui_length)
+{
+	std::vector<T>* vec = new vector<T>();
+
+	for (size_t i = 0; i < ui_length; i++)
+	{
+		vec->push_back(getRandomNumberInRange<T>(0, 2) % 2);
+	} // end for
+
+	return vec;
+} // end template getRandomBinaryString
+
 
 /// <summary>Calculates the standard deviation of the given set.</summary>
 /// <typeparam name="T">Type that implements operator+, operator-, operator*, operator/, and double(T) (explicit cast).</typeparam>
@@ -88,6 +109,7 @@ double getStandardDeviation(const std::vector<T>* p_data, const double d_mean)
 
 	return sqrt(d_standardDeviation / static_cast<double>(p_data->size()));
 } // end template getStandardDeviation
+
 
 /// <summary>Calculates the range of the given set.</summary>
 /// <typeparam name="T">Type that implements operator- and double(T) (explicit cast).</typeparam>
@@ -119,6 +141,7 @@ inline double getRange(const std::vector<T>* p_data)
 	return result;
 } // end template getRange
 
+
 /// <summary>Calculates the median of the given set.</summary>
 /// <typeparam name="T">Type that implements operator+ and operator/.</typeparam>
 /// <param name="p_data">Vector containing the set.</param>
@@ -140,6 +163,7 @@ inline T getMedian(std::vector<T>* p_data)
 	} // end else
 } // end template getMedian
 
+
 /// <summary>Finds the maximum of the given set.</summary>
 /// <typeparam name="T">Type that implements std::less.</typeparam>
 /// <param name="p_vect">Vector containing the set.</param>
@@ -152,6 +176,7 @@ inline T maxValueInVector(std::vector<T>* p_vect)
 	return p_vect->at(p_vect->size() - 1);
 } // end template maxValueInVector
 
+
 /// <summary>Finds the minimum of the given set.</summary>
 /// <typeparam name="T">Type that implements std::less.</typeparam>
 /// <param name="p_vect">Vector containing the set.</param>
@@ -163,6 +188,7 @@ inline T minValueInVector(std::vector<T>* p_vect)
 
 	return p_vect->at(0);
 } // end template minValueInVector
+
 
 /// <summary>Converts a string to type T.</summary>
 /// <typeparam name="T">A type that can be extracted from a string using stringstream.</typeparam>
@@ -179,6 +205,7 @@ inline T convertStringToType(const std::string s)
 
 	return t;
 } // end template convertStringToType
+
 
 /// <summary>Finds the distance between point A and point B.</summary>
   /// <typeparam name="T">A type that implements double(T) (explicit cast).</typeparam>
