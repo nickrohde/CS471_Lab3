@@ -97,9 +97,9 @@ inline void Population::operator+=(Offspring& newGenes)
 } // end operator+
 
 
-inline void Population::sort(Population & pop)
+inline void Population::sort(void)
 {
-	std::sort(pop.genes.begin(), pop.genes.end(), std::greater<Gene>());
+	std::sort(genes.begin(), genes.end(), std::less<Gene>());
 } // end method sort;
 
 

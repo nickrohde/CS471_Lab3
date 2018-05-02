@@ -4,8 +4,7 @@ using namespace std;
 
 results_t* geneticAlgorithm(fitnessFunction f, const Population_Info& POP_INFO, const Bounds& BOUNDS, const Mutation_Info& MUT_INFO)
 {
-
-	return nullptr;
+	throw not_implemented();
 }
 
 
@@ -24,8 +23,6 @@ Offspring* crossingOver(const Gene& PARENT_A, const Gene& PARENT_B, const Crossi
 	} // end if
 	else
 	{
-
-
 		res->offsprings.push_back(PARENT_A);
 		res->offsprings.push_back(PARENT_B);
 

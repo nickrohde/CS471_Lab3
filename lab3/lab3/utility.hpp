@@ -190,6 +190,24 @@ inline T minValueInVector(std::vector<T>* p_vect)
 } // end template minValueInVector
 
 
+/// <summary>Finds the sum of the given set.</summary>
+/// <typeparam name="T">Type that implements std::less.</typeparam>
+/// <param name="p_vect">Vector containing the set.</param>
+/// <returns>The sum of all elements in the given set.</returns>
+template <typename T>
+inline T vectorSum(std::vector<T>* p_vect)
+{
+	T sum = 0;
+
+	for (auto & e : *p_vect)
+	{
+		sum += e;
+	} // end for
+
+	return sum;
+} // end template vectorSum
+
+
 /// <summary>Converts a string to type T.</summary>
 /// <typeparam name="T">A type that can be extracted from a string using stringstream.</typeparam>
 /// <param name="s">The string to convert.</param>
@@ -208,14 +226,21 @@ inline T convertStringToType(const std::string s)
 
 
 /// <summary>Finds the distance between point A and point B.</summary>
-  /// <typeparam name="T">A type that implements double(T) (explicit cast).</typeparam>
-  /// <param name="a">The first point.</param>
-  /// <param name="b">The second point.</param>
-  /// <returns>The distance between points <paramref name="a"/> and <paramref name="b">.</returns>
+/// <typeparam name="T">A type that implements double(T) (explicit cast).</typeparam>
+/// <param name="a">The first point.</param>
+/// <param name="b">The second point.</param>
+/// <returns>The distance between points <paramref name="a"/> and <paramref name="b">.</returns>
 template <typename T>
 inline double getDistance(T a, T b)
 {
 	return sqrt(pow((b - a), 2));
 } // end template getDistance
 
+///<summary>Exception for function that are not yet implemented.</summary>
+class not_implemented : public std::logic_error
+{
+public:
+	/// <summary>Exception constructor.</summary>
+	not_implemented() : std::logic_error("Function not implemented") { }
+}; // end Class NotImplementedException
 #endif

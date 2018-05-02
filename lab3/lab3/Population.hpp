@@ -80,9 +80,8 @@ public:
 
 	// Static Methods:
 	// Operations:
-	/// <summary>Sorts the population <paramref name="pop"/> in descending order.</summary>
-	/// <param name="stream">The population to sort.</param>
-	static inline void sort(Population& pop);
+	/// <summary>Sorts the population <paramref name="pop"/> in ascending order.</summary>
+	inline void sort(void);
 
 private:
 	/// <summary>The gene pool of this population.</summary>

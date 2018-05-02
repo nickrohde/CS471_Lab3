@@ -6,6 +6,14 @@
 #include "Gene.hpp"
 
 
+///<summary>Container for Parents.</summary>
+struct Parents
+{
+	Gene* parent_A;
+	Gene* parent_B;
+}; // end Struct Parents
+
+
 ///<summary>Stores the offspring after a crossover.</summary>
 struct Offspring
 {
