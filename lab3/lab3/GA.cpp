@@ -1,14 +1,50 @@
 #include "GA.hpp"
+#include "SelectionStrategy.hpp"
 
 using namespace std;
 
-results_t* geneticAlgorithm(fitnessFunction f, const Population_Info& POP_INFO, const Bounds& BOUNDS, const Mutation_Info& MUT_INFO)
+results_t* geneticAlgorithm(fitnessFunction f, const Population_Info& POP_INFO, const Bounds& BOUNDS, const Mutation_Info& MUT_INFO, const Crossing_Over_Info& CR_INFO)
 {
-	throw not_implemented();
-}
+	results_t* res = new results_t();
+
+	Population* current = new Population(POP_INFO.ui_SIZE, POP_INFO.ui_GENE_DIM, BOUNDS);
+
+	for (size_t i = 0; i < POP_INFO.ui_GENERATIONS; i++)
+	{
+		// find the fitness of the population and sort it
+		current->evaluateAll(f);
+		current->sort();
+
+		Parents* parents = SelectionStrategy::selectParents(*current);
+
+		Population* next_pop = new Population(POP_INFO.ui_GENE_DIM);
+
+		moveElite(current, next_pop, POP_INFO.d_ELITISM_RATE);
 
 
-Offspring* crossingOver(const Gene& PARENT_A, const Gene& PARENT_B, const Crossing_Over_Info& CO_INFO)
+		Offspring* offspring = crossingOver(parents->parent_A, parents->parent_B, CR_INFO);
+
+		delete current;
+		current = next_pop;
+	} // end for
+
+	return res;
+} // end method geneticAlgorithm
+
+
+void moveElite(const Population * old_pop, Population * new_pop, const double ER)
+{
+	// find number of elite individuals
+	size_t elite = static_cast<size_t>(static_cast<double>(old_pop->size()) * ER);
+
+	for (size_t i = 0; i < elite; i++)
+	{
+		(*new_pop) += &((*old_pop)[i]);
+	} // end for
+} // end method moveElite
+
+
+Offspring* crossingOver(const Gene* PARENT_A, const Gene* PARENT_B, const Crossing_Over_Info& CO_INFO)
 {
 	Offspring* res = new Offspring();
 

@@ -76,7 +76,8 @@ public:
 	/// <returns>The stream with the contents of <paramref name="gene"/> added to the end.</returns>
 	friend std::ostream& operator<<(std::ostream& stream, const Gene& gene);
 
-	/// <summary>Determines if crossing over will occur based on the CO rate in <paramref name="CO_INFO"/>, if not, the parents are returned, otherwise, the following process wil occur:
+	/// <summary>
+	///			 Determines if crossing over will occur based on the CO rate in <paramref name="CO_INFO"/>, if not, the parents are returned, otherwise, the following process wil occur:
 	///			 Splits the genes of <paramref name="PARENT_A"/> and <paramref name="PARENT_B"/> in the specified number of spots, and then recombines the pieces to generate a specified 
 	///			 number of offsprings.
 	/// </summary>
@@ -84,7 +85,7 @@ public:
 	/// <param name="PARENT_B">The second parent.</param>
 	/// <param name="CO_INFO">Structure containing # of cuts to make, chance of crossing over occurring, and number of offspring to create.</param>
 	/// <returns>An Offspring object containing the specified number of offspring genes.</returns>
-	friend Offspring* crossingOver(const Gene& PARENT_A, const Gene& PARENT_B, const Crossing_Over_Info& CO_INFO);
+	friend Offspring* crossingOver(const Gene* PARENT_A, const Gene* PARENT_B, const Crossing_Over_Info& CO_INFO);
 
 private:
 	// Private Data Members:

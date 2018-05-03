@@ -2,12 +2,16 @@
 
 #ifndef _UTILITY_H
 #define _UTILITY_H
+
+#pragma region Includes
 #include <vector>
 #include <random>
 #include <algorithm>
 #include <chrono>
+#pragma endregion
 
 
+#pragma region Defines
 /// <summary>Pi</summary>
 #ifndef _PI
 #define _PI 3.141592653589793238462643383279
@@ -28,13 +32,17 @@
 #ifndef NULL
 #define NULL 0
 #endif
+#pragma endregion
 
 
+#pragma region Typedefs
 /// <summary>Typedefs for convenience.</summary>
 typedef unsigned int uint;
 typedef std::chrono::high_resolution_clock::time_point	timePoint;
 typedef std::chrono::duration<double>					duration;
 typedef std::chrono::high_resolution_clock				highRes_Clock;
+#pragma endregion
+
 
 /// <summary>Gets a random number in the given range using a mersenne twister.</summary>
 /// <typeparam name="T">Some type that the mersenne twister can generate.</typeparam>
@@ -72,16 +80,16 @@ std::vector<T>* getRandomVector(const std::size_t ui_SIZE, const T p_MIN, const 
 } // end template getRandomVector
 
 
-  /// <summary>Gets a vector of size <paramref name=ui_LENGTH"/> that contains a random binary string.</summary>
+  /// <summary>Gets a vector of size <paramref name="ui_LENGTH"/> that contains a random binary string.</summary>
   /// <typeparam name="T">A numeric type that implements operator%.</typeparam>
   /// <param name="ui_LENGTH">The number of 'bits' to generate.</param>
   /// <returns>A pointer to a vector containing a random binary string.</returns>
 template <typename T>
-inline std::vector<T>* getRandomBinaryString(std::size_t ui_length)
+inline std::vector<T>* getRandomBinaryString(const std::size_t ui_LENGTH)
 {
 	std::vector<T>* vec = new vector<T>();
 
-	for (size_t i = 0; i < ui_length; i++)
+	for (size_t i = 0; i < ui_LENGTH; i++)
 	{
 		vec->push_back(getRandomNumberInRange<T>(0, 2) % 2);
 	} // end for
@@ -195,7 +203,7 @@ inline T minValueInVector(std::vector<T>* p_vect)
 /// <param name="p_vect">Vector containing the set.</param>
 /// <returns>The sum of all elements in the given set.</returns>
 template <typename T>
-inline T vectorSum(std::vector<T>* p_vect)
+inline T vectorSum(const std::vector<T>* p_vect)
 {
 	T sum = 0;
 
@@ -235,6 +243,7 @@ inline double getDistance(T a, T b)
 {
 	return sqrt(pow((b - a), 2));
 } // end template getDistance
+
 
 ///<summary>Exception for function that are not yet implemented.</summary>
 class not_implemented : public std::logic_error

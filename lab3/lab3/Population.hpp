@@ -37,6 +37,9 @@ public:
 	/// <param name="f">The fitness function to evaluate the population on.</param>
 	void evaluateAll(fitnessFunction f);
 
+	/// <summary>Sorts this population in ascending order.</summary>
+	inline void sort(void);
+
 	// Getters:
 	/// <summary>Getter for the size of the population.</summary>
 	/// <returns>The size of this population.</returns>
@@ -63,7 +66,7 @@ public:
 	/// <param name="newGene">The new gene that will be added to this population.</param>
 	/// <remarks>The gene to be added must be compatible, i.e. of the same length as the genes already in this population.</remarks>
 	/// <exception name="std::invalid_argument">Thrown if <paramref name="newGene"/> is not the same length as all other genes in this population.</exception>
-	inline void operator+=(Gene& newGene);
+	inline void operator+=(Gene* newGene);
 
 	/// <summary>Adds the genes <paramref name="newGenes"/> to this population.</summary>
 	/// <param name="newGene">The new genes that will be added to this population.</param>
@@ -71,19 +74,18 @@ public:
 	/// <exception name="std::invalid_argument">Thrown if any gene in <paramref name="newGenes"/> is not the same length as all other genes in this population.</exception>
 	inline void operator+=(Offspring& newGenes);
 
+	// Friend declarations:
 	/// <summary>Inserts the contents of <paramref name="pop"/> into the <paramref name="stream"/>.</summary>
 	/// <param name="stream">The stream to insert this population into.</param>
 	/// <param name="pop">The population to be inserted.</param>
 	/// <returns>The stream with the contents of <paramref name="pop"/> added to the end.</returns>
 	friend std::ostream& operator<<(std::ostream& stream, const Population& pop);
 
-
-	// Static Methods:
-	// Operations:
-	/// <summary>Sorts the population <paramref name="pop"/> in ascending order.</summary>
-	inline void sort(void);
+	/// <remarks>The selection strategy requires access to the probabilities stored in the population. This allows efficient access.</remarks>
+	friend class SelectionStrategy;	
 
 private:
+	// Private Data Members:
 	/// <summary>The gene pool of this population.</summary>
 	GenePool genes;
 
@@ -92,6 +94,16 @@ private:
 
 	/// <summary>The total fitness of all members of this population</summary>
 	double d_totalFitness;
+
+	/// <summary>Parallel vector to the outer vector of genes, containing the probabilities individual i is randomly selected by the roulette rule.</summary>
+	std::vector<double> probabilities;
+
+	// Private Methods:
+	// Operations:
+	/// <summary>Determines the propability distribution for this population by mapping the fitness values into the positive reals.</summary>
+	/// <param name="f">The fitness function to base the probabilities on.</param>
+	void findProbabilities(fitnessFunction f);
+
 }; // end Class Population
 
 #endif

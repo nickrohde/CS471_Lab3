@@ -49,25 +49,22 @@ Gene* SelectionStrategy::tournament(const Population & pop)
 
 Gene* SelectionStrategy::roulette(const Population & pop)
 {
-	vector<double>* probabilities = findProbabilities(pop);
-
 	// our random number is in the range [0, total_probabilities]
-	double	d_rand = getRandomNumberInRange<double>(0.0, vectorSum(probabilities));
+	double	d_rand = getRandomNumberInRange<double>(0.0, vectorSum(&pop.probabilities));
 
 	Gene* selected = &(pop[0]);
 
-	for (size_t i = 0; i < probabilities->size(); i++)
+	for (size_t i = 0; i < pop.probabilities.size(); i++)
 	{
 		// if probability[i] <= rand < probability[i+1], the individual i was selected
-		if (probabilities->at(i) > d_rand)
+		// if probability[size] <= rand <= sum_probabilities, the last individual was selected
+		if (pop.probabilities.at(i) > d_rand)
 		{
 			break;
 		} // end if
 
 		selected = &(pop[i]);
 	} // end for
-
-	delete probabilities;
 
 	return selected;
 } // end method roulette
@@ -90,22 +87,3 @@ Gene* SelectionStrategy::steadyState(const Population & pop)
 	throw not_implemented();
 } // end method steadyState
 
-
-vector<double>* SelectionStrategy::findProbabilities(const Population & pop)
-{
-	double  d_worst = pop[pop.size() - 1].fitness(),
-			d_offset = 0.0;
-
-	vector<double>* probabilities = new vector<double>();
-
-	for (size_t i = 0; i < pop.size(); i++)
-	{
-		// we are mapping the set of fitness values into the positive real numbers by subtracting all values
-		// from the highest fitness values. This will result in the range [0,worst_fitness-min_fitness]
-		// the offset is the running total of probabilities
-		probabilities->push_back(d_offset + ((d_worst - pop[i].fitness()) / pop.totalFitness()));
-		d_offset = probabilities->at(i);
-	} // end for
-	
-	return probabilities;
-} // end method findProbabilities

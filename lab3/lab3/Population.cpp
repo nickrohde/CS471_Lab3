@@ -73,17 +73,17 @@ inline Gene Population::operator[](const size_t i) const
 } // end operator[]
 
 
-inline void Population::operator+=(Gene& newGene)
+inline void Population::operator+=(Gene* newGene)
 {
 	if (genes.size() > 0)
 	{
-		if (newGene.length() != genes.at(0).length())
+		if (newGene->length() != genes.at(0).length())
 		{
 			throw invalid_argument("New genes are not of the same size as genes in population.");
 		} // end if
 	} // end if
 
-	genes.push_back(newGene);
+	genes.push_back(*newGene);
 	ui_size++;
 } // end operator+
 
@@ -101,6 +101,26 @@ inline void Population::sort(void)
 {
 	std::sort(genes.begin(), genes.end(), std::less<Gene>());
 } // end method sort;
+
+
+void Population::findProbabilities(fitnessFunction f)
+{
+	evaluateAll(f);
+	sort();
+
+	double  d_worst = genes[size() - 1].fitness(),
+			d_offset = 0.0;
+
+	for (size_t i = 0; i < size(); i++)
+	{
+		// we are mapping the set of fitness values into the positive real numbers by subtracting all values
+		// from the highest fitness values. This will result in the range [0,worst_fitness-min_fitness]
+		// the offset is the running total of probabilities
+		probabilities.push_back(d_offset + ((d_worst - genes[i].fitness()) / totalFitness()));
+		d_offset = probabilities.at(i);
+	} // end for
+
+} // end method findProbabilities
 
 
 ostream& operator<<(ostream& stream, const Population& pop)

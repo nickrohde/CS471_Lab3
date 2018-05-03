@@ -51,12 +51,6 @@ private:
 	/// <returns>A pointer to a gene in the population <paramref name="pop"/> that is the selected parent.</returns>
 	static Gene* steadyState(const Population& pop);
 
-	/// <summary>Determines the propability distribution for the given population by mapping the fitness values into the positive reals.</summary>
-	/// <param name="pop">The population to map.</param>
-	/// <returns>A pointer to a vector containing the probability distribution.</returns>
-	/// <remarks>It is assumed that the population <paramref name="pop"/> is sorted, and all fitness values have already been calculated.</remarks>
-	static vector<double>* findProbabilities(const Population& pop);
-
 }; // end Class SelectionStrategy
 
 #endif // !_SELECTION_STRAT_H
