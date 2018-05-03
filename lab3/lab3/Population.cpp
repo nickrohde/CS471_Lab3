@@ -2,9 +2,9 @@
 
 using namespace std;
 
-Population::Population(const size_t ui_SIZE)
+Population::Population(void)
 {
-	ui_size = ui_SIZE;
+	ui_size = 0;
 } // end Default Constructor
 
 
@@ -27,28 +27,10 @@ Population::Population(const Population & other)
 } // end Copy Constructor
 
 
-void Population::evaluateAll(fitnessFunction f)
-{
-	d_totalFitness = 0;
-
-	for (auto& g : genes)
-	{
-		g.evaluate(f);
-		d_totalFitness += g.fitness();
-	} // end for
-} // end method evaluateAll
-
-
 inline size_t Population::size(void) const
 {
 	return ui_size;
 } // end method size
-
-
-inline double Population::totalFitness(void) const
-{
-	return d_totalFitness;
-} // end method totalFitness
 
 
 inline Gene& Population::operator[](const size_t i)
@@ -73,54 +55,10 @@ inline Gene Population::operator[](const size_t i) const
 } // end operator[]
 
 
-inline void Population::operator+=(Gene* newGene)
-{
-	if (genes.size() > 0)
-	{
-		if (newGene->length() != genes.at(0).length())
-		{
-			throw invalid_argument("New genes are not of the same size as genes in population.");
-		} // end if
-	} // end if
-
-	genes.push_back(*newGene);
-	ui_size++;
-} // end operator+
-
-
-inline void Population::operator+=(Offspring& newGenes)
-{
-	for (size_t i = 0; i < newGenes.offsprings.size(); i++)
-	{
-		(*this) += newGenes.offsprings.at(i);
-	} // end for
-} // end operator+
-
-
 inline void Population::sort(void)
 {
 	std::sort(genes.begin(), genes.end(), std::less<Gene>());
-} // end method sort;
-
-
-void Population::findProbabilities(fitnessFunction f)
-{
-	evaluateAll(f);
-	sort();
-
-	double  d_worst = genes[size() - 1].fitness(),
-			d_offset = 0.0;
-
-	for (size_t i = 0; i < size(); i++)
-	{
-		// we are mapping the set of fitness values into the positive real numbers by subtracting all values
-		// from the highest fitness values. This will result in the range [0,worst_fitness-min_fitness]
-		// the offset is the running total of probabilities
-		probabilities.push_back(d_offset + ((d_worst - genes[i].fitness()) / totalFitness()));
-		d_offset = probabilities.at(i);
-	} // end for
-
-} // end method findProbabilities
+} // end method sort
 
 
 ostream& operator<<(ostream& stream, const Population& pop)
@@ -134,3 +72,4 @@ ostream& operator<<(ostream& stream, const Population& pop)
 
 	return stream;
 } // end operator<<
+

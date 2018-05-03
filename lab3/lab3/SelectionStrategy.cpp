@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Parents* SelectionStrategy::selectParents(const Population& pop, StrategyType t)
+Parents* SelectionStrategy::selectParents(const GA_Population& pop, StrategyType t)
 {
 	Parents* p = new Parents();
 	function<Gene*(const Population&)> f;
@@ -41,13 +41,13 @@ Parents* SelectionStrategy::selectParents(const Population& pop, StrategyType t)
 } // end method selectParents
 
 
-Gene* SelectionStrategy::tournament(const Population & pop)
+Gene* SelectionStrategy::tournament(const GA_Population & pop)
 {
 	throw not_implemented();
 } // end method tournament
 
 
-Gene* SelectionStrategy::roulette(const Population & pop)
+Gene* SelectionStrategy::roulette(const GA_Population & pop)
 {
 	// our random number is in the range [0, total_probabilities]
 	double	d_rand = getRandomNumberInRange<double>(0.0, vectorSum(&pop.probabilities));
@@ -70,19 +70,19 @@ Gene* SelectionStrategy::roulette(const Population & pop)
 } // end method roulette
 
 
-Gene* SelectionStrategy::proportionate(const Population & pop)
+Gene* SelectionStrategy::proportionate(const GA_Population & pop)
 {
 	throw not_implemented();
 } // end method proportionate
 
 
-Gene* SelectionStrategy::rank(const Population & pop)
+Gene* SelectionStrategy::rank(const GA_Population & pop)
 {
 	throw not_implemented();
 } // end method rank
 
 
-Gene* SelectionStrategy::steadyState(const Population & pop)
+Gene* SelectionStrategy::steadyState(const GA_Population & pop)
 {
 	throw not_implemented();
 } // end method steadyState

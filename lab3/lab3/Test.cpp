@@ -177,42 +177,4 @@ string Test::makeFileName(size_t ui_dim, int i_functionNumber)
 	return name.str();
 }
 
-/* -------------------------- End of Class Test -------------------------- */
-
-// definition of results_t::operator<<
-// this is just here to avoid having an extra file to compile (this cannot be defined inside the class as it's a friend)
-std::ostream& operator<<(ostream& stream, results_t& res)
-{
-	if (res.bestValues.size() > 0)
-	{
-		stream << "Dimensions: " << res.bestValues.size() << "\n";
-	} // end if
-
-	stream << "Optimal solution found: " << res.d_bestValue << "\n";
-
-	stream << "Time to compute: " << res.d_avgTime << "\n";
-
-	stream << "Function calls made: " << res.ui_functionCalls << "\n";
-
-	stream << "Final delta x value: " << res.d_finalDeltaX << "\n";
-
-	if (res.bestValues.size() > 0)
-	{
-		stream << "Optimal point: [ ";
-
-		for (size_t i = 0; i < res.bestValues.size(); i++)
-		{
-			stream << res.bestValues.at(i);
-
-			if ((i + 1) < res.bestValues.size())
-			{
-				stream << ", ";
-			} // end if
-		} // end for
-
-		stream << " ]" << endl;
-	} // end if
-
-	return stream;
-} // end operator << 
 

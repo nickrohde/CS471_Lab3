@@ -3,8 +3,10 @@
 #ifndef _GENETIC_ALG_H
 #define _GENETIC_ALG_H
 
-#include "Population.hpp"
+#include "GA_Population.hpp"
 #include "results.hpp"
+
+#define NUM_OFFSPRING 2
 
 /// <summary>
 ///			 Finds the optimal solution to <paramref name="f"/> by generating an initial population and then generating new populations 

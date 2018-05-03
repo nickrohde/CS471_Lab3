@@ -70,12 +70,14 @@ public:
 	inline bool operator>(const Gene& other);
 
 	// Friend declarations:
+	// Operators:
 	/// <summary>Inserts the contents of <paramref name="gene"/> into the <paramref name="stream"/>.</summary>
 	/// <param name="stream">The stream to insert this gene into.</param>
 	/// <param name="geme">The gene to be inserted.</param>
 	/// <returns>The stream with the contents of <paramref name="gene"/> added to the end.</returns>
 	friend std::ostream& operator<<(std::ostream& stream, const Gene& gene);
 
+	// Operations:
 	/// <summary>
 	///			 Determines if crossing over will occur based on the CO rate in <paramref name="CO_INFO"/>, if not, the parents are returned, otherwise, the following process wil occur:
 	///			 Splits the genes of <paramref name="PARENT_A"/> and <paramref name="PARENT_B"/> in the specified number of spots, and then recombines the pieces to generate a specified 
@@ -86,6 +88,13 @@ public:
 	/// <param name="CO_INFO">Structure containing # of cuts to make, chance of crossing over occurring, and number of offspring to create.</param>
 	/// <returns>An Offspring object containing the specified number of offspring genes.</returns>
 	friend Offspring* crossingOver(const Gene* PARENT_A, const Gene* PARENT_B, const Crossing_Over_Info& CO_INFO);
+
+	// Classes:
+	/// <remarks>results_t is a friend to allow more efficient copying of the best solution.</remarks>
+	friend class results_t;
+		
+	/// <remarks>Differential evolution requires direct access to the gene.</remarks>
+	friend class DE_Population;
 
 private:
 	// Private Data Members:

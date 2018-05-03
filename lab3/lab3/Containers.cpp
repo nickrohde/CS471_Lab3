@@ -81,16 +81,14 @@ void Mutation_Info::operator=(const Mutation_Info & OTHER)
 
 Crossing_Over_Info::Crossing_Over_Info(void)
 {
-	ui_CROSSING_OVER_POINTS = ui_NUM_OFFSPRING = 0;
+	ui_CROSSING_OVER_POINTS = 0;
 	d_CROSSING_OVER_RATE = 0.0;
 } // end Default Constructor
 
 
-Crossing_Over_Info::Crossing_Over_Info(std::size_t offsprings, std::size_t points, double rate)
+Crossing_Over_Info::Crossing_Over_Info(std::size_t points, double rate)
 {
 	ui_CROSSING_OVER_POINTS = points;
-	ui_NUM_OFFSPRING = offsprings;
-
 	d_CROSSING_OVER_RATE = rate;
 } // end Constructor 3
 
@@ -98,8 +96,6 @@ Crossing_Over_Info::Crossing_Over_Info(std::size_t offsprings, std::size_t point
 void Crossing_Over_Info::operator=(const Crossing_Over_Info & OTHER)
 {
 	ui_CROSSING_OVER_POINTS = OTHER.d_CROSSING_OVER_RATE;
-	ui_NUM_OFFSPRING = OTHER.ui_NUM_OFFSPRING;
-
 	d_CROSSING_OVER_RATE = OTHER.d_CROSSING_OVER_RATE;
 } // end operator=
 

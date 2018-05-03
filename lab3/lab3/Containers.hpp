@@ -85,20 +85,16 @@ struct Crossing_Over_Info
 	Crossing_Over_Info(void);
 
 	/// <summary>Constructs a structure with the given values.</summary>
-	/// <param name="offsprings">Number of offsprings to generate per couple.</param>
 	/// <param name="points">Number of crossing-points to generate.</param>
 	/// <param name="rate">Chance of crossing-over to occur.</param>
-	Crossing_Over_Info(std::size_t offsprings, std::size_t points, double rate);
+	Crossing_Over_Info(std::size_t points, double rate);
 
 	/// <summary>Copy assignment.</summary>
 	/// <param name="OTHER">The object to copy.</param>
 	void operator=(const Crossing_Over_Info& OTHER);
 
-	/// <summary>The number of offspring for each couple.</summary>
-	std::size_t	ui_NUM_OFFSPRING,
-
 	/// <summary>The number of cross-over points to generate.</summary>
-				ui_CROSSING_OVER_POINTS;
+	std::size_t	ui_CROSSING_OVER_POINTS;
 
 	/// <summary>The chance for crossing-over to occur.</summary>
 	double		d_CROSSING_OVER_RATE;

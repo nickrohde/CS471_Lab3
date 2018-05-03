@@ -4,19 +4,18 @@
 #define _POPULATION_H
 
 #include <vector>
-#include "Gene.hpp"
+#include "Gene.hpp" // Gene, Bounds
 #include <algorithm>
 
 typedef std::vector<Gene> GenePool;
 
-///<summary>Stores the genetic information of a population.</summary>
+///<summary>Abstract base class that stores the genetic information of a population.</summary>
 class Population
 {
 public:
 	// Constructors:
-	/// <summary>Constructs an empty population for genes of length <paramref name="ui_DIM"/>.</summary>
-	/// <param name="ui_DIM">The size of each gene in the population.</param>
-	Population(const std::size_t ui_DIM);
+	/// <summary>Constructs an empty population.</summary>
+	Population(void);
 
 	/// <summary>Constructs a new population with <paramref name="ui_SIZE"/> members, each of size <paramref name="ui_DIM"/>.</summary>
 	/// <param name="ui_SIZE">The size of the population.</param>
@@ -33,21 +32,16 @@ public:
 	~Population(void) {}
 
 	// Operations:
-	/// <summary>Finds the fitness of all members of the population and calculates the total fitness of the population.</summary>
-	/// <param name="f">The fitness function to evaluate the population on.</param>
-	void evaluateAll(fitnessFunction f);
-
 	/// <summary>Sorts this population in ascending order.</summary>
 	inline void sort(void);
+
+	/// <summary>Evaluates the fitness of all members of the population.</summary>
+	virtual void evaluateAll(fitnessFunction f) = 0;
 
 	// Getters:
 	/// <summary>Getter for the size of the population.</summary>
 	/// <returns>The size of this population.</returns>
 	inline std::size_t size(void) const;
-
-	/// <summary>Getter for the total fitness of the population.</summary>
-	/// <returns>The total fitness of this population.</returns>
-	inline double totalFitness(void) const;
 
 	// Operators:
 	/// <summary>Accessor for the member at index <paramref name="i"/>.</summary>
@@ -62,18 +56,6 @@ public:
 	/// <exception name="std::out_of_range">Thrown if <paramref name="i"/> is larger than the size of the population.</exception>
 	inline Gene operator[](const std::size_t i) const;
 
-	/// <summary>Adds the gene <paramref name="newGene"/> to this population.</summary>
-	/// <param name="newGene">The new gene that will be added to this population.</param>
-	/// <remarks>The gene to be added must be compatible, i.e. of the same length as the genes already in this population.</remarks>
-	/// <exception name="std::invalid_argument">Thrown if <paramref name="newGene"/> is not the same length as all other genes in this population.</exception>
-	inline void operator+=(Gene* newGene);
-
-	/// <summary>Adds the genes <paramref name="newGenes"/> to this population.</summary>
-	/// <param name="newGene">The new genes that will be added to this population.</param>
-	/// <remarks>All genes to be added must be compatible, i.e. of the same length as the genes already in this population.</remarks>
-	/// <exception name="std::invalid_argument">Thrown if any gene in <paramref name="newGenes"/> is not the same length as all other genes in this population.</exception>
-	inline void operator+=(Offspring& newGenes);
-
 	// Friend declarations:
 	/// <summary>Inserts the contents of <paramref name="pop"/> into the <paramref name="stream"/>.</summary>
 	/// <param name="stream">The stream to insert this population into.</param>
@@ -81,28 +63,14 @@ public:
 	/// <returns>The stream with the contents of <paramref name="pop"/> added to the end.</returns>
 	friend std::ostream& operator<<(std::ostream& stream, const Population& pop);
 
-	/// <remarks>The selection strategy requires access to the probabilities stored in the population. This allows efficient access.</remarks>
-	friend class SelectionStrategy;	
 
-private:
-	// Private Data Members:
+protected:
+	// Protected Data Members:
 	/// <summary>The gene pool of this population.</summary>
 	GenePool genes;
 
 	/// <summary>The size of this population.</summary>
 	std::size_t ui_size;
-
-	/// <summary>The total fitness of all members of this population</summary>
-	double d_totalFitness;
-
-	/// <summary>Parallel vector to the outer vector of genes, containing the probabilities individual i is randomly selected by the roulette rule.</summary>
-	std::vector<double> probabilities;
-
-	// Private Methods:
-	// Operations:
-	/// <summary>Determines the propability distribution for this population by mapping the fitness values into the positive reals.</summary>
-	/// <param name="f">The fitness function to base the probabilities on.</param>
-	void findProbabilities(fitnessFunction f);
 
 }; // end Class Population
 
