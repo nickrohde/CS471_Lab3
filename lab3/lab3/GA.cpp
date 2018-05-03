@@ -15,18 +15,33 @@ results_t* geneticAlgorithm(fitnessFunction f, const Population_Info& POP_INFO, 
 		current->evaluateAll(f);
 		current->sort();
 
-		Parents* parents = SelectionStrategy::selectParents(*current);
-
 		Population* next_pop = new Population(POP_INFO.ui_GENE_DIM);
 
 		moveElite(current, next_pop, POP_INFO.d_ELITISM_RATE);
 
+		while(next_pop->size() < POP_INFO.ui_SIZE)
+		{
+			Parents* parents = SelectionStrategy::selectParents(*current);
+			Offspring* offspring = crossingOver(parents->parent_A, parents->parent_B, CR_INFO);
 
-		Offspring* offspring = crossingOver(parents->parent_A, parents->parent_B, CR_INFO);
+			for(auto & g : offspring.offsprings)
+			{
+				g.mutate(MUT_INFO);
+				(*new_pop) += g;
+			} // end for g
+		} // end for j
 
 		delete current;
 		current = next_pop;
 	} // end for
+
+	// find final solution
+	current->evaluateAll(f);
+	current->sort();
+
+	// save best solution
+	res->bestSolution = (*current)[0];
+	res->d_best = (*current)[0].fitness();
 
 	return res;
 } // end method geneticAlgorithm
