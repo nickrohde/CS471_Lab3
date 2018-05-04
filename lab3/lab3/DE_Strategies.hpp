@@ -4,8 +4,10 @@
 #define _DE_STRATS_H
 
 #include "DE_Population.hpp"
+#include "results.hpp"
+#include <functional>
 
-typedef function <results_t*(fitnessFunction, const Population_Info, const Bounds, const Mutation_Info, const Crossing_Over_Info)> DE_Function;
+typedef std::function<results_t*(fitnessFunction, const Population_Info, const Bounds, const Mutation_Info, const Crossing_Over_Info)> DE_Function;
 
 ///<summary>Enum for the 10 Differential Evolution Strategies.</summary>
 enum DE_Strategy

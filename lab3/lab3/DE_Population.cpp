@@ -2,6 +2,11 @@
 
 using namespace std;
 
+DE_Population::DE_Population(const DE_Population & other) : Population(other)
+{
+}
+
+/*
 void DE_Population::evaluateAll(fitnessFunction f)
 {
 	for (Gene& g : genes)
@@ -9,6 +14,7 @@ void DE_Population::evaluateAll(fitnessFunction f)
 		g.evaluate(f);
 	} // end for
 } // end method evaluateAll
+*/
 
 inline std::vector<Gene>::iterator DE_Population::begin(void)
 {

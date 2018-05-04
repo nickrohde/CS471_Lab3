@@ -95,7 +95,7 @@ Crossing_Over_Info::Crossing_Over_Info(std::size_t points, double rate)
 
 void Crossing_Over_Info::operator=(const Crossing_Over_Info & OTHER)
 {
-	ui_CROSSING_OVER_POINTS = OTHER.d_CROSSING_OVER_RATE;
+	ui_CROSSING_OVER_POINTS = OTHER.ui_CROSSING_OVER_POINTS;
 	d_CROSSING_OVER_RATE = OTHER.d_CROSSING_OVER_RATE;
 } // end operator=
 
@@ -106,21 +106,16 @@ void Crossing_Over_Info::operator=(const Crossing_Over_Info & OTHER)
 Population_Info::Population_Info(void)
 {
 	ui_GENERATIONS = ui_GENE_DIM = ui_SIZE = 0;
-	d_ELITISM_RATE = d_GROWTH_FACTOR = 0.0;
-	b_ALLOW_POP_GROWTH = false;
+	d_ELITISM_RATE = 0.0;
 } // end Default Constructor
 
 
-Population_Info::Population_Info(std::size_t size, std::size_t dim, std::size_t gen, double ER, bool allow_growth, double growthFactor)
+Population_Info::Population_Info(std::size_t size, std::size_t dim, std::size_t gen, double ER)
 {
 	ui_SIZE = size;
 	ui_GENE_DIM = dim;
 	ui_GENERATIONS = gen;
-
 	d_ELITISM_RATE = ER;
-	d_GROWTH_FACTOR = growthFactor;
-
-	b_ALLOW_POP_GROWTH = allow_growth;
 } // end Constructor 6
 
 
@@ -129,10 +124,6 @@ void Population_Info::operator=(const Population_Info & OTHER)
 	ui_SIZE = OTHER.ui_SIZE;
 	ui_GENE_DIM = OTHER.ui_GENE_DIM;
 	ui_GENERATIONS = OTHER.ui_GENERATIONS;
-
 	d_ELITISM_RATE = OTHER.d_ELITISM_RATE;
-	d_GROWTH_FACTOR = OTHER.d_GROWTH_FACTOR;
-
-	b_ALLOW_POP_GROWTH = OTHER.b_ALLOW_POP_GROWTH;
 } // end operator=
 

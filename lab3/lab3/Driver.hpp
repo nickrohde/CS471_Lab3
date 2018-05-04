@@ -70,7 +70,7 @@ private:
 	/// <summary>Vector containing initial delta x values for local search.</summary>
 	std::vector<double> LS_deltaX;
 
-	/// <summary>Displays the menu to the user.</summary>
+	/// <summary>Displays the main menu to the user.</summary>
 	void presentMenu(void);
 
 	/// <summary>Gets the user's choice from stdio.</summary>

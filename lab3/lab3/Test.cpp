@@ -1,8 +1,19 @@
-#include "Test.hpp"
 #include <fstream>
 #include <sstream>
+#include "Test.hpp"
+
 
 using namespace std;
+
+void Test::runTest(void)
+{
+	Mutation_Info MUT_INFO(0.15, 25, 0.89);
+	Crossing_Over_Info CR_INFO(1, 0.9);
+	Bounds bounds(-512, 512);
+	Population_Info POP_INFO(50, 20, 100, 0.2);
+
+	geneticAlgorithm(costFunctions[0], POP_INFO, bounds, MUT_INFO, CR_INFO);
+}
 
 
 Test::Test(void)
@@ -144,13 +155,6 @@ inline void Test::makeRanges(double**& da_ranges)
 void Test::dumpDataToFile(string s_name, results_t* res)
 {
 	ofstream file(s_name, ios::out | ios::app);
-
-	file << "\nData:\n";
-
-	for (size_t i = 0; i < res->data.size(); i++)
-	{
-		file << res->data.at(i) << "\n";
-	} // end for
 
 	file << "\n";
 	

@@ -2,13 +2,12 @@
 #include <sstream>
 #include <cctype>
 #include <fstream>
-#include <functional>
-#include "randomWalk.hpp"
-#include "localSearch.hpp"
-#include "iterativeLocalSearch.hpp"
-#include "utility.hpp"
+#include "GA.hpp"
+#include "DE_Strategies.hpp"
 #include "Driver.hpp"
 #include "IniParser.hpp"
+
+#define _DEBUG 1
 
 
 using namespace std;
@@ -16,9 +15,8 @@ using namespace std;
 
 void Driver::presentMenu(void)
 {
-	cout << "1 - Random Walk" << endl;
-	cout << "2 - Local Search" << endl;
-	cout << "3 - Iterative Local Search" << endl;
+	cout << "1 - Genetic Algorithm" << endl;
+	cout << "2 - Differential Evolution" << endl;
 	cout << "Q - Quit" << endl;
 } // end method presentMenu
 
@@ -243,79 +241,69 @@ Driver::Driver(string s_fileName) : Driver()
 
 int Driver::run(void)
 {
-	char choice = 'q';
-
-	if (b_invalid)
+	if (!_DEBUG)
 	{
-		cout << "Parsing of the .ini file failed. Exiting ..." << endl;
-		return EXIT_FAILURE; // ini file parsing was unsuccessful
-	} // end if
+		char choice = 'q';
 
-	test = new Test(&LS_deltaX, ui_startDim, ui_endDim, ui_dimDelta, b_storeData);
-
-	do
-	{
-		clearInput();
-		choice = getChoice(); // get user input for which algorithm to run
-
-		switch (choice)
+		if (b_invalid)
 		{
+			cout << "Parsing of the .ini file failed. Exiting ..." << endl;
+			return EXIT_FAILURE; // ini file parsing was unsuccessful
+		} // end if
+
+		test = new Test(&LS_deltaX, ui_startDim, ui_endDim, ui_dimDelta, b_storeData);
+
+		do
+		{
+			clearInput();
+			choice = getChoice(); // get user input for which algorithm to run
+
+			switch (choice)
+			{
 			case '1':
 			{
-				cout << "Starting tests for Random Walk ..." << endl;
+				cout << "Starting tests for Genetic Algorithm ..." << endl;
 
 				compute_start = highRes_Clock::now(); // start timer for whole run
 
-				test->runTest<randWlk>(randomWalk, ui_iterations, b_storeData, ui_iterations);
+
 
 				compute_end = highRes_Clock::now();
 				time_to_compute = std::chrono::duration_cast<duration>(compute_end - compute_start);
 
-				cout << "Finished running tests for Random Walk." << endl;
+				cout << "Finished running tests for Genetic Algorithm." << endl;
 				cout << "Time elapsed: " << time_to_compute.count() << " seconds." << endl << endl;
 
 				break;
 			} // end case 1
 
 			case '2':
-			{	
-				cout << "Starting tests for Local Search ..." << endl;
+			{
+				cout << "Starting tests for Differential Evolution ..." << endl;
 
 				compute_start = highRes_Clock::now(); // start timer for whole run
 
-				test->runTest<lclSrch>(localSearch, b_storeData, ui_iterations);
+
 
 				compute_end = highRes_Clock::now();
 				time_to_compute = std::chrono::duration_cast<duration>(compute_end - compute_start);
 
-				cout << "Finished running tests for Local Search." << endl;
+				cout << "Finished running tests for Differential Evolution." << endl;
 				cout << "Time elapsed: " << time_to_compute.count() << " seconds." << endl << endl;
 
 				break;
 			} // end case 2
 
-			case '3':
-			{
-				cout << "Starting tests for Iterative Local Search ..." << endl;
-				cout << "This may take upwards of 10 minutes." << endl;
-
-				compute_start = highRes_Clock::now(); // start timer for whole run
-
-				test->runTest<itrLclSrch>(iterativeLocalSearch, ui_iterations, b_storeData, ui_numILSItr);
-
-				compute_end = highRes_Clock::now();
-				time_to_compute = std::chrono::duration_cast<duration>(compute_end - compute_start);
-
-				cout << "Finished running tests for Iterative Local Search." << endl;
-				cout << "Time elapsed: " << time_to_compute.count() << " seconds." << endl << endl;
-
-				break;
-			} // end case 3
-
 			default:
 				break;
-		} // end switch
-	} while (tolower(choice) != 'q');
+			} // end switch
+		} while (tolower(choice) != 'q');
+	}
+	else
+	{
+		test = new Test();
+		test->runTest();
+	}
 
 	delete test;
 

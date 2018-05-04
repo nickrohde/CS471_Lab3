@@ -30,7 +30,7 @@ public:
 	// Operations: 
 	/// <summary>Finds the fitness of all members of the population.</summary>
 	/// <param name="f">The fitness function to evaluate the population on.</param>
-	virtual void evaluateAll(fitnessFunction f);
+	//void evaluateAll(fitnessFunction f);
 	
 	// Iterators:
 	/// <summary>Getter for an iterator to the start of the population.</summary>
@@ -38,9 +38,6 @@ public:
 
 	/// <summary>Getter for an iterator to the end of the population.</summary>
 	inline std::vector<Gene>::iterator end(void);
-
-private:
-	// 
 
 
 }; // end Class DE_Population

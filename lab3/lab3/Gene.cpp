@@ -10,7 +10,7 @@ Gene::Gene(const size_t ui_SIZE, const Bounds BOUNDS)
 
 	for (size_t i = 0; i < ui_length; i++)
 	{
-		gene.push_back(getRandomNumberInRange(bounds.d_min, bounds.d_max));
+		gene.push_back(getRandomRealInRange(bounds.d_min, bounds.d_max));
 	} // end for
 } // end Constructor 3
 
@@ -24,7 +24,7 @@ Gene::Gene(const Gene& PARENT_A, const Gene& PARENT_B, std::size_t ui_CO_POINTS)
 
 	for (size_t i = 0; i < ui_CO_POINTS; i++)
 	{
-		indeces.push_back(getRandomNumberInRange<size_t>(0, PARENT_A.length()));
+		indeces.push_back(getRandomIntInRange<size_t>(0, PARENT_A.length()));
 	} // end for
 
 	// order cross over points
@@ -36,7 +36,7 @@ Gene::Gene(const Gene& PARENT_A, const Gene& PARENT_B, std::size_t ui_CO_POINTS)
 
 Gene::Gene(const Gene& other)
 {
-	ui_length = other.length;
+	ui_length = other.length();
 	bounds = other.bounds;
 
 	std::copy(other.gene.begin(), other.gene.end(), gene.begin());
@@ -46,13 +46,13 @@ Gene::Gene(const Gene& other)
 void Gene::mutate(const Mutation_Info MUT_INFO)
 {
 	// getRandomNumberInRage returns a number in range [a,b), thus we need to add a little bit to b to make the range [a,b]
-	double d = getRandomNumberInRange<double>(0.0, (1.0 + std::numeric_limits<double>::min()));
+	double d = getRandomRealInRange<double>(0.0, (1.0 + std::numeric_limits<double>::min()));
 
 	if (d - MUT_INFO.d_rate <= 0)
 	{
-		size_t i = getRandomNumberInRange<size_t>(0, ui_length);
+		size_t i = getRandomIntInRange<size_t>(0, ui_length);
 
-		double new_value = getRandomNumberInRange(bounds.d_min, bounds.d_max);
+		double new_value = getRandomRealInRange(bounds.d_min, bounds.d_max);
 
 		(*this)[i] = new_value;
 	} // end if
@@ -99,9 +99,9 @@ double Gene::operator[](const size_t i) const
 } // end operator[]
 
 
-inline bool Gene::operator>(const Gene & other)
+inline bool Gene::operator<(const Gene & other) const
 {
-	return d_fitness > other.d_fitness;
+	return d_fitness < other.d_fitness;
 } // end operator>
 
  
@@ -135,7 +135,7 @@ void Gene::recombine(const Gene & PARENT_A, const Gene & PARENT_B, const std::ve
 
 std::ostream& operator<<(std::ostream& stream, const Gene& gene)
 {
-	if (gene.length > 0)
+	if (gene.length() > 0)
 	{
 		stream << gene[0];
 
@@ -149,5 +149,6 @@ std::ostream& operator<<(std::ostream& stream, const Gene& gene)
 
 	return stream;
 } // end operator<<
+
 
 

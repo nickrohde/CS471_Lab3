@@ -45,16 +45,32 @@ typedef std::chrono::high_resolution_clock				highRes_Clock;
 
 
 /// <summary>Gets a random number in the given range using a mersenne twister.</summary>
-/// <typeparam name="T">Some type that the mersenne twister can generate.</typeparam>
+/// <typeparam name="T">Some std::RealType.</typeparam>
 /// <param name="p_MIN">Pointer to the minimum value of the range.</param>
 /// <param name="p_MAX">Pointer to the maximum value of the range.</param>
-/// <returns>A random number between <paramref name="p_MIN"/> and <paramref name="p_MAX"/> (both inclusive).</returns>
+/// <returns>A random number between <paramref name="p_MIN"/> and <paramref name="p_MAX"/> (inclusive-exclusive).</returns>
 template <typename T>
-inline T getRandomNumberInRange(const T p_MIN, const T p_MAX)
+inline T getRandomRealInRange(const T p_MIN, const T p_MAX)
 {
 	static std::random_device rd{};
 	static std::mt19937 engine{ rd() };
 	std::uniform_real_distribution<T> dist{ p_MIN, p_MAX };
+
+	return dist(engine);
+} // end template getRandomNumberInRange
+
+
+/// <summary>Gets a random number in the given range using a mersenne twister.</summary>
+/// <typeparam name="T">Some std::IntType or std::UIntType.</typeparam>
+/// <param name="p_MIN">Pointer to the minimum value of the range.</param>
+/// <param name="p_MAX">Pointer to the maximum value of the range.</param>
+/// <returns>A random number between <paramref name="p_MIN"/> and <paramref name="p_MAX"/> (both inclusive).</returns>
+template <typename T>
+inline T getRandomIntInRange(const T MIN, const T MAX)
+{
+	static std::random_device rd{};
+	static std::mt19937 engine{ rd() };
+	std::uniform_int_distribution<T> dist{ MIN, MAX };
 
 	return dist(engine);
 } // end template getRandomNumberInRange
@@ -87,11 +103,11 @@ std::vector<T>* getRandomVector(const std::size_t ui_SIZE, const T p_MIN, const 
 template <typename T>
 inline std::vector<T>* getRandomBinaryString(const std::size_t ui_LENGTH)
 {
-	std::vector<T>* vec = new vector<T>();
+	std::vector<T>* vec = new std::vector<T>();
 
-	for (size_t i = 0; i < ui_LENGTH; i++)
+	for (std::size_t i = 0; i < ui_LENGTH; i++)
 	{
-		vec->push_back(getRandomNumberInRange<T>(0, 2) % 2);
+		vec->push_back(getRandomIntInRange<T>(0, 2) % 2);
 	} // end for
 
 	return vec;

@@ -32,7 +32,7 @@ public:
 	// Operations:
 	/// <summary>Finds the fitness of all members of the population and calculates the total fitness of the population.</summary>
 	/// <param name="f">The fitness function to evaluate the population on.</param>
-	virtual void evaluateAll(fitnessFunction f);
+	//void evaluateAll(fitnessFunction f);
 
 	/// <summary>Getter for the total fitness of the population.</summary>
 	/// <returns>The total fitness of this population.</returns>

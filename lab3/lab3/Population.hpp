@@ -36,7 +36,7 @@ public:
 	inline void sort(void);
 
 	/// <summary>Evaluates the fitness of all members of the population.</summary>
-	virtual void evaluateAll(fitnessFunction f) = 0;
+	//virtual void evaluateAll(fitnessFunction f) = 0;
 
 	// Getters:
 	/// <summary>Getter for the size of the population.</summary>

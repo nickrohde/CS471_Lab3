@@ -4,8 +4,7 @@
 #define _TEST_H
 #include <initializer_list> // variadic template
 #include "functions.hpp"    // cost functions
-#include "results.hpp"      // results_t
-
+#include "GA.hpp"
 
 #define SHEKEL_OUTER_SIZE 30 // size of outer array used by shekel's foxholes
 #define SHEKEL_INNER_SIZE 10 // size of inner array used by shekel's foxholes
@@ -37,7 +36,7 @@ public:
 	/// <param name="args">Argument list passed on to <paramref name="f"/></param>
 	/// <returns>All output is placed into the file(s) named "results_[dimension]_f[function number].csv". Output is only generated if the variable b_storeData is set to true.</returns>
 	/// <remarks>This function is defined here because it is a template.</remarks>
-	template <typename F, typename... Args>
+	/*template <typename F, typename... Args>
 	void runTest(F f, std::size_t ui_iterations, Args... args)
 	{
 		for (size_t ui_length = ui_minDimensions; ui_length <= ui_maxDimensions; ui_length += ui_dimensionDelta)
@@ -103,7 +102,9 @@ public:
 			} // end if
 		} // end for length
 	} // end template runTest
+	*/
 
+	void runTest(void);
 
 
 private:
@@ -131,7 +132,7 @@ private:
 	duration	time_to_compute;
 
 	/// <summary>Vector containing pointers to the cost functions.</summary>
-	std::vector<costFunction> costFunctions;
+	std::vector<fitnessFunction> costFunctions;
 
 	/// <summary>Vector containing the delta x values for local search.</summary>
 	std::vector<double> LS_delta;

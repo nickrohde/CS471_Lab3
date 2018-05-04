@@ -67,7 +67,7 @@ public:
 	/// <param name="other">The gene to compare this gene to.</param>
 	/// <returns>True iff the fitness of this gene is greater than that of the gene <paramref name="other"/>, otherwise false.</returns>
 	/// <remarks>This operator establishes a natural ordering for <see cref="std::sort"/>.</remarks>
-	inline bool operator>(const Gene& other);
+	inline bool operator<(const Gene& other) const;
 
 	// Friend declarations:
 	// Operators:
@@ -91,7 +91,7 @@ public:
 
 	// Classes:
 	/// <remarks>results_t is a friend to allow more efficient copying of the best solution.</remarks>
-	friend class results_t;
+	friend struct results_t;
 		
 	/// <remarks>Differential evolution requires direct access to the gene.</remarks>
 	friend class DE_Population;

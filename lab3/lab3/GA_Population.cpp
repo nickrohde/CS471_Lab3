@@ -15,6 +15,7 @@ inline double GA_Population::totalFitness(void) const
 } // end method totalFitness
 
 
+/*
 void GA_Population::evaluateAll(fitnessFunction f)
 {
 	d_totalFitness = 0;
@@ -25,13 +26,11 @@ void GA_Population::evaluateAll(fitnessFunction f)
 		d_totalFitness += g.fitness();
 	} // end for
 } // end method evaluateAll
+*/
 
 
 void GA_Population::findProbabilities(fitnessFunction f)
 {
-	evaluateAll(f);
-	sort();
-
 	double  d_worst = genes[size() - 1].fitness(),
 			d_offset = 0.0;
 
@@ -51,7 +50,7 @@ GA_Population & operator<<(GA_Population & pop, const Offspring * newGenes)
 {
 	for (auto& g : newGenes->offsprings)
 	{
-		pop << &g;
+		pop << g;
 	} // end for
 
 	return pop;

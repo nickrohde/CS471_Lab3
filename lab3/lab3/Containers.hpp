@@ -3,7 +3,9 @@
 #ifndef _CONTAINER_H
 #define _CONTAINER_H
 
-#include "Gene.hpp"
+#include <vector>
+
+class Gene; // let the compiler know the class Gene exists
 
 
 ///<summary>Container for Parents.</summary>
@@ -22,7 +24,7 @@ struct Offspring
 	inline void operator=(const Offspring& OTHER);
 
 	/// <summary>Vector containing the genes that are offsprings of the parents.</summary>
-	std::vector<Gene> offsprings;
+	std::vector<Gene*> offsprings;
 }; // end Struct Offspring
 
 
@@ -112,9 +114,7 @@ struct Population_Info
 	/// <param name="dim">Length of genes.</param>
 	/// <param name="gen">Number of generations to run.</param>
 	/// <param name="ER">Elitism rate.</param>
-	/// <param name="allow_growth">(Optional) Whether or not the population can grow. DEFAULT: false</param>
-	/// <param name="growthFactor">(Optional) The rate at which growth occurs if it is allowed. DEFAULT: 0.0</param>
-	Population_Info(std::size_t size, std::size_t dim, std::size_t gen, double ER, bool allow_growth = false, double growthFactor = 0.0);
+	Population_Info(std::size_t size, std::size_t dim, std::size_t gen, double ER);
 
 	/// <summary>Copy assignment.</summary>
 	/// <param name="OTHER">The object to copy.</param>
@@ -130,13 +130,7 @@ struct Population_Info
 				ui_GENERATIONS;
 
 	/// <summary>The elitism rate.</summary>
-	double		d_ELITISM_RATE,
-
-	/// <summary>When <see cref="b_ALLOW_POP_GROWTH"/> is set, this is the maximum growth for the population per generation. Otherwise this is ignored.</summary>
-				d_GROWTH_FACTOR;
-
-	/// <summary>Whether or not the population can grow.</summary>
-	bool		b_ALLOW_POP_GROWTH;
+	double		d_ELITISM_RATE;
 }; // end Struct Population Info
 
 #endif // !_CONTAINER_H

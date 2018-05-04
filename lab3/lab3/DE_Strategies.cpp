@@ -50,63 +50,61 @@ results_t* differentialEvolution(fitnessFunction f, const Population_Info POP_IN
 
 results_t* best_1_exp(fitnessFunction f, const Population_Info POP_INFO, const Bounds BOUNDS, const Mutation_Info MUT_INFO, const Crossing_Over_Info CR_INFO)
 {
-	
-
-
+	throw not_implemented();
 } // end method best_1_exp
 
 
 results_t* best_2_exp(fitnessFunction f, const Population_Info POP_INFO, const Bounds BOUNDS, const Mutation_Info MUT_INFO, const Crossing_Over_Info CR_INFO)
 {
-
+	throw not_implemented();
 } // end method best_2_exp
 
 
 results_t* best_1_bin(fitnessFunction f, const Population_Info POP_INFO, const Bounds BOUNDS, const Mutation_Info MUT_INFO, const Crossing_Over_Info CR_INFO)
 {
-
+	throw not_implemented();
 } // end method best_1_bin
 
 
 results_t* best_2_bin(fitnessFunction f, const Population_Info POP_INFO, const Bounds BOUNDS, const Mutation_Info MUT_INFO, const Crossing_Over_Info CR_INFO)
 {
-
+	throw not_implemented();
 } // end method best_2_bin
 
 
 results_t* rand_1_exp(fitnessFunction f, const Population_Info POP_INFO, const Bounds BOUNDS, const Mutation_Info MUT_INFO, const Crossing_Over_Info CR_INFO)
 {
-
+	throw not_implemented();
 } // end method rand_1_exp
 
 
 results_t* rand_2_exp(fitnessFunction f, const Population_Info POP_INFO, const Bounds BOUNDS, const Mutation_Info MUT_INFO, const Crossing_Over_Info CR_INFO)
 {
-
+	throw not_implemented();
 } // end method rand_2_exp
 
 
 results_t* rand_1_bin(fitnessFunction f, const Population_Info POP_INFO, const Bounds BOUNDS, const Mutation_Info MUT_INFO, const Crossing_Over_Info CR_INFO)
 {
-
+	throw not_implemented();
 } // end method rand_1_bin
 
 
 results_t* rand_2_bin(fitnessFunction f, const Population_Info POP_INFO, const Bounds BOUNDS, const Mutation_Info MUT_INFO, const Crossing_Over_Info CR_INFO)
 {
-
+	throw not_implemented();
 } // end method rand_2_bin
 
 
 results_t* rtb_1_exp(fitnessFunction f, const Population_Info POP_INFO, const Bounds BOUNDS, const Mutation_Info MUT_INFO, const Crossing_Over_Info CR_INFO)
 {
-
+	throw not_implemented();
 } // end method rtb_1_exp
 
 
 results_t* rtb_1_bin(fitnessFunction f, const Population_Info POP_INFO, const Bounds BOUNDS, const Mutation_Info MUT_INFO, const Crossing_Over_Info CR_INFO)
 {
-
+	throw not_implemented();
 } // end method rtb_1_bin
 
 

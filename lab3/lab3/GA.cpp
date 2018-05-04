@@ -3,6 +3,7 @@
 
 using namespace std;
 
+
 results_t* geneticAlgorithm(fitnessFunction f, const Population_Info& POP_INFO, const Bounds& BOUNDS, const Mutation_Info& MUT_INFO, const Crossing_Over_Info& CR_INFO)
 {
 	results_t* res = new results_t();
@@ -13,7 +14,12 @@ results_t* geneticAlgorithm(fitnessFunction f, const Population_Info& POP_INFO, 
 	for (size_t i = 0; i < POP_INFO.ui_GENERATIONS; i++)
 	{
 		// find the fitness of the population and sort it
-		current->evaluateAll(f);
+		
+		for (size_t j = 0; j < current->size(); j++)
+		{
+			(*current)[j].evaluate(f);
+		}
+
 		current->sort();
 
 		GA_Population* next_pop = new GA_Population();
@@ -28,8 +34,8 @@ results_t* geneticAlgorithm(fitnessFunction f, const Population_Info& POP_INFO, 
 
 			for(auto & g : offspring->offsprings)
 			{
-				g.mutate(MUT_INFO);
-				(*next_pop) << &g;
+				g->mutate(MUT_INFO);
+				(*next_pop) << g;
 			} // end for g
 		} // end for j
 
@@ -38,7 +44,11 @@ results_t* geneticAlgorithm(fitnessFunction f, const Population_Info& POP_INFO, 
 	} // end for
 
 	// find final solution
-	current->evaluateAll(f);
+
+	for (size_t j = 0; j < current->size(); j++)
+	{
+		(*current)[j].evaluate(f);
+	}
 	current->sort();
 
 	// save best solution
@@ -65,15 +75,15 @@ Offspring* crossingOver(const Gene* PARENT_A, const Gene* PARENT_B, const Crossi
 	Offspring* res = new Offspring();
 
 	// getRandomNumberInRage returns a number in range [a,b), thus we need to add a little bit to b to make it range [0,1]
-	if (getRandomNumberInRange<double>(0.0, (1.0 + std::numeric_limits<double>::min())) < CO_INFO.d_CROSSING_OVER_RATE)
+	if (getRandomRealInRange<double>(0.0, (1.0 + numeric_limits<double>::min())) < CO_INFO.d_CROSSING_OVER_RATE)
 	{
-			res->offsprings.push_back(Gene(*PARENT_A, *PARENT_B, CO_INFO.ui_CROSSING_OVER_POINTS));
-			res->offsprings.push_back(Gene(*PARENT_A, *PARENT_B, CO_INFO.ui_CROSSING_OVER_POINTS));
+			res->offsprings.push_back(new Gene(*PARENT_A, *PARENT_B, CO_INFO.ui_CROSSING_OVER_POINTS));
+			res->offsprings.push_back(new Gene(*PARENT_A, *PARENT_B, CO_INFO.ui_CROSSING_OVER_POINTS));
 	} // end if
 	else
 	{
-		res->offsprings.push_back(*PARENT_A);
-		res->offsprings.push_back(*PARENT_B);
+		res->offsprings.push_back(const_cast<Gene*>(PARENT_A));
+		res->offsprings.push_back(const_cast<Gene*>(PARENT_B));
 	} // end else
 
 	return res;

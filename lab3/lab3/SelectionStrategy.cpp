@@ -2,10 +2,12 @@
 
 using namespace std;
 
+typedef function<Gene*(const GA_Population&)> StrategyFunction;
+
 Parents* SelectionStrategy::selectParents(const GA_Population& pop, StrategyType t)
 {
 	Parents* p = new Parents();
-	function<Gene*(const Population&)> f;
+	StrategyFunction f;
 
 	switch (t)
 	{
@@ -50,7 +52,7 @@ Gene* SelectionStrategy::tournament(const GA_Population & pop)
 Gene* SelectionStrategy::roulette(const GA_Population & pop)
 {
 	// our random number is in the range [0, total_probabilities]
-	double	d_rand = getRandomNumberInRange<double>(0.0, vectorSum(&pop.probabilities));
+	double	d_rand = getRandomRealInRange<double>(0.0, vectorSum(&pop.probabilities));
 
 	Gene* selected = &(pop[0]);
 

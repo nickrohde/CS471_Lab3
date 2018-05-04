@@ -1,6 +1,8 @@
 #include "driver.hpp"
+#include <iostream>
 #include <exception>
 
+#define DEBUG 1
 
 using namespace std;
 
@@ -14,17 +16,24 @@ int main(int argc, char ** argv)
 	Driver* driver = nullptr;
 	int i_exitCode = 1;
 
-	if (argc > 1) // ini file parameter is present
+	if (!DEBUG && argc > 1) // ini file parameter is present
 	{
 		string s(argv[1]);
 		driver = new Driver(s);
 	} // end if
-	else // no ini file parameter
+	else if (!DEBUG) // no ini file parameter
 	{
 		cout << "No ini parameter received. Attempting to open \"config.ini\" file." << endl;
 		driver = new Driver("config.ini");
 	} // end else (argc <= 1)
 	
+	if (DEBUG)
+	{
+		cout << "Debug mode. Starting with default values ..." << endl;
+		driver = new Driver();
+	} // end if
+
+
 	try
 	{
 		if (driver->isValid())
