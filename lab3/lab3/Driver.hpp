@@ -11,6 +11,21 @@ typedef std::chrono::high_resolution_clock::time_point timePoint;
 typedef std::chrono::duration<double> duration;
 typedef std::chrono::high_resolution_clock highRes_Clock;
 
+/// <summary>Converts a string to type T.</summary>
+/// <typeparam name="T">A type that can be extracted from a string using stringstream.</typeparam>
+/// <param name="s">The string to convert.</param>
+/// <returns>An equivalent T object to the string, if such an object exists, otherwise a default object of type T.</returns>
+template <typename T>
+inline T convertStringToType(const std::string s)
+{
+	T t;
+	std::stringstream ss;
+
+	ss << s;
+	ss >> t;
+
+	return t;
+} // end template convertStringToType
 
 /// <summary>Class that runs the program.</summary>
 class Driver

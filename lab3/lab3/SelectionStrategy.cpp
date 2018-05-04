@@ -45,7 +45,7 @@ Parents* SelectionStrategy::selectParents(const GA_Population& pop, StrategyType
 
 Gene* SelectionStrategy::tournament(const GA_Population & pop)
 {
-	throw not_implemented();
+	throw std::logic_error("Not Implemented");
 } // end method tournament
 
 
@@ -74,18 +74,18 @@ Gene* SelectionStrategy::roulette(const GA_Population & pop)
 
 Gene* SelectionStrategy::proportionate(const GA_Population & pop)
 {
-	throw not_implemented();
+	throw std::logic_error("Not Implemented");
 } // end method proportionate
 
 
 Gene* SelectionStrategy::rank(const GA_Population & pop)
 {
-	throw not_implemented();
+	throw std::logic_error("Not Implemented");
 } // end method rank
 
 
 Gene* SelectionStrategy::steadyState(const GA_Population & pop)
 {
-	throw not_implemented();
+	throw std::logic_error("Not Implemented");
 } // end method steadyState
 

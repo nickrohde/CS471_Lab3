@@ -232,23 +232,6 @@ inline T vectorSum(const std::vector<T>* p_vect)
 } // end template vectorSum
 
 
-/// <summary>Converts a string to type T.</summary>
-/// <typeparam name="T">A type that can be extracted from a string using stringstream.</typeparam>
-/// <param name="s">The string to convert.</param>
-/// <returns>An equivalent T object to the string, if such an object exists, otherwise a default object of type T.</returns>
-template <typename T>
-inline T convertStringToType(const std::string s)
-{
-	T t;
-	std::stringstream ss;
-
-	ss << s;
-	ss >> t;
-
-	return t;
-} // end template convertStringToType
-
-
 /// <summary>Finds the distance between point A and point B.</summary>
 /// <typeparam name="T">A type that implements double(T) (explicit cast).</typeparam>
 /// <param name="a">The first point.</param>
@@ -260,7 +243,7 @@ inline double getDistance(T a, T b)
 	return sqrt(pow((b - a), 2));
 } // end template getDistance
 
-
+/*
 ///<summary>Exception for function that are not yet implemented.</summary>
 class not_implemented : public std::logic_error
 {
@@ -268,4 +251,6 @@ public:
 	/// <summary>Exception constructor.</summary>
 	not_implemented() : std::logic_error("Function not implemented") { }
 }; // end Class NotImplementedException
+*/
 #endif
+
