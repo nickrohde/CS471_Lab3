@@ -34,6 +34,16 @@ public:
 	/// <param name="f">The fitness function to evaluate the population on.</param>
 	//void evaluateAll(fitnessFunction f);
 
+	inline virtual size_t size(void) const
+	{
+		return ui_size;
+	}
+
+	inline virtual void sort(void)
+	{
+		std::sort(genes.begin(), genes.end(), std::less<Gene>());
+	}
+
 	/// <summary>Getter for the total fitness of the population.</summary>
 	/// <returns>The total fitness of this population.</returns>
 	inline double totalFitness(void) const;

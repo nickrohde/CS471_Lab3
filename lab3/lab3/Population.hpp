@@ -33,7 +33,7 @@ public:
 
 	// Operations:
 	/// <summary>Sorts this population in ascending order.</summary>
-	inline void sort(void);
+	inline virtual void sort(void);
 
 	/// <summary>Evaluates the fitness of all members of the population.</summary>
 	//virtual void evaluateAll(fitnessFunction f) = 0;
@@ -41,20 +41,20 @@ public:
 	// Getters:
 	/// <summary>Getter for the size of the population.</summary>
 	/// <returns>The size of this population.</returns>
-	inline std::size_t size(void) const;
+	inline virtual std::size_t size(void) const;
 
 	// Operators:
 	/// <summary>Accessor for the member at index <paramref name="i"/>.</summary>
 	/// <param name="i">The 0-based index to access.</param>
 	/// <returns>A reference to the member at index i.</returns>
 	/// <exception name="std::out_of_range">Thrown if <paramref name="i"/> is larger than the size of the population.</exception>
-	inline Gene& operator[](const std::size_t i);
+	inline virtual Gene& operator[](const std::size_t i);
 
 	/// <summary>Accessor for the member at index <paramref name="i"/>.</summary>
 	/// <param name="i">The 0-based index to access.</param>
 	/// <returns>A copy of the member at index i.</returns>
 	/// <exception name="std::out_of_range">Thrown if <paramref name="i"/> is larger than the size of the population.</exception>
-	inline Gene operator[](const std::size_t i) const;
+	inline virtual Gene operator[](const std::size_t i) const;
 
 	// Friend declarations:
 	/// <summary>Inserts the contents of <paramref name="pop"/> into the <paramref name="stream"/>.</summary>
