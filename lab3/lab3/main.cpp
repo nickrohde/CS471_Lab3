@@ -7,6 +7,7 @@
 using namespace std;
 
 
+
 /// <summary>Program entry point.</summary> 
 /// <param name="argc">Number of command line arguments passed to main.</param>
 /// <param name="argv">Array of string containing the name of a ini file to parse, or nothing.</param>
@@ -31,6 +32,7 @@ int main(int argc, char ** argv)
 	{
 		cout << "Debug mode. Starting with default values ..." << endl;
 		driver = new Driver();
+		i_exitCode = driver->run();
 	} // end if
 
 

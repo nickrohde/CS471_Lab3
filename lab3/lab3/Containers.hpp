@@ -19,12 +19,8 @@ struct Parents
 ///<summary>Stores the offspring after a crossover.</summary>
 struct Offspring
 {
-	/// <summary>Copy assignment.</summary>
-	/// <param name="OTHER">The object to copy.</param>
-	inline void operator=(const Offspring& OTHER);
-
 	/// <summary>Vector containing the genes that are offsprings of the parents.</summary>
-	std::vector<Gene*> offsprings;
+	std::vector<Gene> offsprings;
 }; // end Struct Offspring
 
 

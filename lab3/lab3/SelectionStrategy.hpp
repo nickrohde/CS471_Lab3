@@ -14,7 +14,6 @@ public:
 	{
 		Tournament,
 		Roulette,
-		Proportionate,
 		Rank,
 		SteadyState
 	}; // end enum Type
@@ -29,27 +28,22 @@ private:
 	/// <summary>Selects a parent from the population <paramref name="pop"/> using the tournament selection strategy.</summary>
 	/// <param name="pop">The population to select parents from.</param>
 	/// <returns>A pointer to a gene in the population <paramref name="pop"/> that is the selected parent.</returns>
-	static Gene* tournament(const GA_Population& pop);
+	static std::size_t tournament(const GA_Population& pop);
 
 	/// <summary>Selects a parent from the population <paramref name="pop"/> using the roulette selection strategy.</summary>
 	/// <param name="pop">The population to select an individual from.</param>
 	/// <returns>A pointer to a gene in the population <paramref name="pop"/> that is the selected parent.</returns>
-	static Gene* roulette(const GA_Population& pop);
-
-	/// <summary>Selects a parent from the population <paramref name="pop"/> using the proportionate selection strategy.</summary>
-	/// <param name="pop">The population to select an individual from.</param>
-	/// <returns>A pointer to a gene in the population <paramref name="pop"/> that is the selected parent.</returns>
-	static Gene* proportionate(const GA_Population& pop);
+	static std::size_t roulette(const GA_Population& pop);
 
 	/// <summary>Selects a parent from the population <paramref name="pop"/> using the rank selection strategy.</summary>
 	/// <param name="pop">The population to select an individual from.</param>
 	/// <returns>A pointer to a gene in the population <paramref name="pop"/> that is the selected parent.</returns>
-	static Gene* rank(const GA_Population& pop);
+	static std::size_t rank(const GA_Population& pop);
 
 	/// <summary>Selects a parent from the population <paramref name="pop"/> using the steady-state selection strategy.</summary>
 	/// <param name="pop">The population to select an individual from.</param>
 	/// <returns>A pointer to a gene in the population <paramref name="pop"/> that is the selected parent.</returns>
-	static Gene* steadyState(const GA_Population& pop);
+	static std::size_t steadyState(const GA_Population& pop);
 
 }; // end Class SelectionStrategy
 

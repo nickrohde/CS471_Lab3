@@ -12,14 +12,14 @@ public:
 	// Constructors:
 	/// <summary>Constructs an empty population for the Genetic Algorithm.</summary>
 	/// <remarks>There is nothing this constructor must deal with, thus, it is empty.</remarks>
-	GA_Population(void) : Population() {}
+	GA_Population(void) : Population() { d_totalFitness = 0; }
 
 	/// <summary>Constructs a new population with <paramref name="ui_SIZE"/> members, each of size <paramref name="ui_DIM"/>.</summary>
 	/// <param name="ui_SIZE">The size of the population.</param>
 	/// <param name="ui_DIM">The size of each gene in the population.</param>
 	/// <param name="bounds">The min/max value that may be stored in a gene.</param>
 	/// <remarks>There is nothing this constructor must deal with, thus, it is empty.</remarks>
-	GA_Population(const std::size_t ui_SIZE, const std::size_t ui_DIM, const Bounds bounds) : Population(ui_SIZE, ui_DIM, bounds) {}
+	GA_Population(const std::size_t ui_SIZE, const std::size_t ui_DIM, const Bounds& bounds) : Population(ui_SIZE, ui_DIM, bounds) { d_totalFitness = 0; }
 
 	/// <summary>Constructs a new population that is a copy of the population <paramref name="other"/>.</summary>
 	/// <param name="other">The population to copy.</param>
@@ -32,21 +32,17 @@ public:
 	// Operations:
 	/// <summary>Finds the fitness of all members of the population and calculates the total fitness of the population.</summary>
 	/// <param name="f">The fitness function to evaluate the population on.</param>
-	//void evaluateAll(fitnessFunction f);
-
-	inline virtual size_t size(void) const
+	virtual void evaluateAll(fitnessFunction f)
 	{
-		return ui_size;
-	}
+		for (auto& g : genes)
+		{
+			g.evaluate(f);
+		} // end for
+	} // end method evaluateAll
 
-	inline virtual void sort(void)
-	{
-		std::sort(genes.begin(), genes.end(), std::less<Gene>());
-	}
-
-	/// <summary>Getter for the total fitness of the population.</summary>
-	/// <returns>The total fitness of this population.</returns>
-	inline double totalFitness(void) const;
+	/// <summary>Determines the propability distribution for this population by mapping the fitness values into the positive reals.</summary>
+	/// <param name="f">The fitness function to base the probabilities on.</param>
+	void findProbabilities(fitnessFunction f);
 
 	// Friend Declarations:
 	/// <remarks>The selection strategy requires access to the probabilities stored in the population. This allows efficient access.</remarks>
@@ -72,12 +68,6 @@ private:
 
 	/// <summary>Parallel vector to the outer vector of genes, containing the probability an individual is selected by the roulette rule.</summary>
 	std::vector<double> probabilities;
-
-	// Private Methods:
-	// Operations:
-	/// <summary>Determines the propability distribution for this population by mapping the fitness values into the positive reals.</summary>
-	/// <param name="f">The fitness function to base the probabilities on.</param>
-	void findProbabilities(fitnessFunction f);
 
 }; // end Class GA_Population
 

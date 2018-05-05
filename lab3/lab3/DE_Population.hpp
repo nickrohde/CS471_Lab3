@@ -17,7 +17,7 @@ public:
 	/// <param name="ui_SIZE">The size of the population.</param>
 	/// <param name="ui_DIM">The size of each gene in the population.</param>
 	/// <param name="bounds">The min/max value that may be stored in a gene.</param>
-	DE_Population(const std::size_t ui_SIZE, const std::size_t ui_DIM, const Bounds bounds) : Population(ui_SIZE, ui_DIM, bounds) {}
+	DE_Population(const std::size_t ui_SIZE, const std::size_t ui_DIM, const Bounds& bounds) : Population(ui_SIZE, ui_DIM, bounds) {}
 
 	/// <summary>Constructs a new population that is a copy of the population <paramref name="other"/>.</summary>
 	/// <param name="other">The population to copy.</param>
@@ -30,7 +30,13 @@ public:
 	// Operations: 
 	/// <summary>Finds the fitness of all members of the population.</summary>
 	/// <param name="f">The fitness function to evaluate the population on.</param>
-	//void evaluateAll(fitnessFunction f);
+	virtual void evaluateAll(fitnessFunction f)
+	{
+		for (auto& g : genes)
+		{
+			g.evaluate(f);
+		} // end for
+	} // end method evaluateAll
 	
 	// Iterators:
 	/// <summary>Getter for an iterator to the start of the population.</summary>

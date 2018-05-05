@@ -9,23 +9,8 @@ GA_Population::GA_Population(const GA_Population & other) : Population(other)
 } // end Copy Constructor
 
 
-inline double GA_Population::totalFitness(void) const
-{
-	return d_totalFitness;
-} // end method totalFitness
-
-
 /*
 void GA_Population::evaluateAll(fitnessFunction f)
-{
-	d_totalFitness = 0;
-
-	for (auto& g : genes)
-	{
-		g.evaluate(f);
-		d_totalFitness += g.fitness();
-	} // end for
-} // end method evaluateAll
 */
 
 
@@ -34,12 +19,19 @@ void GA_Population::findProbabilities(fitnessFunction f)
 	double  d_worst = genes[size() - 1].fitness(),
 			d_offset = 0.0;
 
+	// find total fitness of population
+	for (auto& g : genes)
+	{
+		d_totalFitness += (d_worst - g.fitness());
+	} // end for
+
 	for (size_t i = 0; i < size(); i++)
 	{
 		// we are mapping the set of fitness values into the positive real numbers by subtracting all values
-		// from the highest fitness values. This will result in the range [0,worst_fitness-min_fitness]
-		// the offset is the running total of probabilities
-		probabilities.push_back(d_offset + ((d_worst - genes[i].fitness()) / totalFitness()));
+		// from the largest (worst) fitness value. This will result in the range [0,1]
+		// the offset is the running total of probabilities, as the individual's fitness increases, it's probability 
+		// decreases proportional to the best solution
+		probabilities.push_back(d_offset + ((d_worst - genes[i].fitness()) / d_totalFitness));
 		d_offset = probabilities.at(i);
 	} // end for
 
@@ -50,7 +42,7 @@ GA_Population & operator<<(GA_Population & pop, const Offspring * newGenes)
 {
 	for (auto& g : newGenes->offsprings)
 	{
-		pop << g;
+		pop << &g;
 	} // end for
 
 	return pop;

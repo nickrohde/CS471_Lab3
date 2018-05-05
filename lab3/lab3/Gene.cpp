@@ -1,16 +1,16 @@
 #include "Gene.hpp"
+#include <cmath>
 
 using namespace std;
 
 
-Gene::Gene(const size_t ui_SIZE, const Bounds BOUNDS)
+Gene::Gene(const size_t ui_SIZE, const Bounds& BOUNDS)
 {
 	ui_length = ui_SIZE;
-	bounds = BOUNDS;
 
 	for (size_t i = 0; i < ui_length; i++)
 	{
-		gene.push_back(getRandomRealInRange(bounds.d_min, bounds.d_max));
+		gene.push_back(getRandomRealInRange(BOUNDS.d_min, BOUNDS.d_max));
 	} // end for
 } // end Constructor 3
 
@@ -18,17 +18,20 @@ Gene::Gene(const size_t ui_SIZE, const Bounds BOUNDS)
 Gene::Gene(const Gene& PARENT_A, const Gene& PARENT_B, std::size_t ui_CO_POINTS)
 {
 	ui_length = PARENT_A.length();
-	bounds = PARENT_A.bounds;
 
 	vector<size_t> indeces;
 
+
 	for (size_t i = 0; i < ui_CO_POINTS; i++)
 	{
-		indeces.push_back(getRandomIntInRange<size_t>(0, PARENT_A.length()));
+		indeces.push_back(getRandomIntInRange<size_t>(0, PARENT_A.length() - 1));
 	} // end for
 
 	// order cross over points
 	std::sort(indeces.begin(), indeces.end());
+
+	// add the end of the gene to the indeces as we need to copy the whole gene
+	indeces.push_back(ui_length);
 
 	recombine(PARENT_A, PARENT_B, &indeces);
 } // end Constructor 3
@@ -37,25 +40,26 @@ Gene::Gene(const Gene& PARENT_A, const Gene& PARENT_B, std::size_t ui_CO_POINTS)
 Gene::Gene(const Gene& other)
 {
 	ui_length = other.length();
-	bounds = other.bounds;
 
-	std::copy(other.gene.begin(), other.gene.end(), gene.begin());
+	for (auto& d : other.gene)
+	{
+		gene.push_back(d);
+	}
+	d_fitness = other.d_fitness;
 } // end Copy Constructor
 
 
-void Gene::mutate(const Mutation_Info MUT_INFO)
+void Gene::mutate(const Mutation_Info& MUT_INFO, const Bounds& BOUNDS)
 {
-	// getRandomNumberInRage returns a number in range [a,b), thus we need to add a little bit to b to make the range [a,b]
-	double d = getRandomRealInRange<double>(0.0, (1.0 + std::numeric_limits<double>::min()));
-
-	if (d - MUT_INFO.d_rate <= 0)
+	for (auto& val : gene)
 	{
-		size_t i = getRandomIntInRange<size_t>(0, ui_length);
-
-		double new_value = getRandomRealInRange(bounds.d_min, bounds.d_max);
-
-		(*this)[i] = new_value;
-	} // end if
+		// getRandomRealInRage returns a number in range [a,b), thus we need to add a little bit to b to make the range [a,b]
+		if (getRandomRealInRange<double>(0.0, (1.0 + std::numeric_limits<double>::min())) < MUT_INFO.d_rate)
+		{
+			double temp = (BOUNDS.d_max - BOUNDS.d_min) * MUT_INFO.d_range * pow((-1.0 * getRandomRealInRange<double>(0.0, 1.0) * MUT_INFO.d_precision), 2.0);
+			val += (getRandomIntInRange<int>(0, 2) % 2) ? (temp * -1) : (temp);
+		} // end if
+	} // end foreach
 } // end method mutate
 
 
@@ -65,16 +69,11 @@ inline size_t Gene::length(void) const
 } // end method length
 
 
-inline double Gene::fitness(void) const
-{
-	return d_fitness;
-} // end methog fitness
+//double Gene::fitness(void) const
 
 
-inline void Gene::evaluate(fitnessFunction f)
-{
-	d_fitness = f(&gene);
-} // end method evaluate
+//inline void Gene::evaluate(fitnessFunction f)
+
 
 
 double& Gene::operator[](const size_t i)
@@ -99,10 +98,7 @@ double Gene::operator[](const size_t i) const
 } // end operator[]
 
 
-inline bool Gene::operator<(const Gene & other) const
-{
-	return d_fitness < other.d_fitness;
-} // end operator>
+//inline bool Gene::operator<(const Gene & other) const
 
  
 void Gene::recombine(const Gene & PARENT_A, const Gene & PARENT_B, const std::vector<size_t>* indeces)
@@ -113,11 +109,14 @@ void Gene::recombine(const Gene & PARENT_A, const Gene & PARENT_B, const std::ve
 
 	// indeces we are compying
 	size_t	start = 0,
-			end = indeces->at(0);
+			end = 0;
 
 	// iterate over all cross-over points
-	for (size_t j = 1; j < indeces->size(); j++)
+	for (size_t j = 0; j < distribution->size(); j++)
 	{
+		start = end;
+		end = indeces->at(j);
+
 		// pointer to current parent to avoid redundant code
 		const Gene* temp = (distribution->at(j) == 0) ? (&PARENT_A) : (&PARENT_B);
 
@@ -126,9 +125,6 @@ void Gene::recombine(const Gene & PARENT_A, const Gene & PARENT_B, const std::ve
 		{
 			gene.push_back(temp->gene.at(k));
 		} // end for
-
-		start = end;
-		end = indeces->at(j);
 	} // end for
 } // end method recombine
 
@@ -149,6 +145,11 @@ std::ostream& operator<<(std::ostream& stream, const Gene& gene)
 
 	return stream;
 } // end operator<<
+
+bool operator<(const Gene & LHS, const Gene & RHS)
+{
+	return LHS.d_fitness < RHS.d_fitness;
+} // end operator<
 
 
 

@@ -4,12 +4,6 @@
 using namespace std;
 
 
-inline void Offspring::operator=(const Offspring & OTHER)
-{
-	std::copy(OTHER.offsprings.begin(), OTHER.offsprings.end(), offsprings.begin());
-} // end operator=
-
-
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 

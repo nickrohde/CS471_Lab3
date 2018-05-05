@@ -8,13 +8,17 @@ Population::Population(void)
 } // end Default Constructor
 
 
-Population::Population(const size_t ui_SIZE, const size_t ui_DIM, const Bounds bounds)
+Population::Population(const size_t ui_SIZE, const size_t ui_DIM, const Bounds& BOUNDS)
 {
 	ui_size = ui_SIZE;
 
+	bounds = BOUNDS;
+
+	genes = GenePool(ui_SIZE);
+
 	for (size_t i = 0; i < ui_size; i++)
 	{
-		genes.push_back(Gene(ui_DIM, bounds));
+		genes[i] = Gene(ui_DIM, BOUNDS);
 	} // end for
 } // end Constructor 4
 
@@ -27,10 +31,8 @@ Population::Population(const Population & other)
 } // end Copy Constructor
 
 
-inline size_t Population::size(void) const
-{
-	return ui_size;
-} // end method size
+//inline size_t Population::size(void) const
+
 
 
 inline Gene& Population::operator[](const size_t i)
@@ -55,10 +57,8 @@ inline Gene Population::operator[](const size_t i) const
 } // end operator[]
 
 
-inline void Population::sort(void)
-{
-	std::sort(genes.begin(), genes.end(), std::less<Gene>());
-} // end method sort
+//inline void Population::sort(void)
+
 
 
 ostream& operator<<(ostream& stream, const Population& pop)

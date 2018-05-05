@@ -18,10 +18,16 @@ class Gene
 public:
 	// Public Methods:
 	// Constructors:
+	Gene(void) 
+	{
+		ui_length = 0;
+		d_fitness = std::numeric_limits<double>::max();
+	}
+
 	/// <summary>Constructs a new randomly generated gene.</summary>
 	/// <param name="ui_SIZE">The length of the gene.</param>
 	/// <param name="BOUNDS">The min/max value that may be stored in the gene.</param>
-	Gene(const std::size_t ui_SIZE, const Bounds BOUNDS);
+	Gene(const std::size_t ui_SIZE, const Bounds& BOUNDS);
 
 	/// <summary>Constructs a new gene that is a copy of the gene <paramref name="other"/>.</summary>
 	/// <param name="other">The gene to copy.</param>
@@ -34,7 +40,8 @@ public:
 	// Operations:
 	/// <summary>Creates a random mutation in this gene.</summary>
 	/// <param name="MUT_INFO">Structure containing the chance, range, and precision of a mutation.</param>
-	void mutate(const Mutation_Info MUT_INFO);
+	/// <param name="BOUNDS">The problem bounds.</param>
+	void mutate(const Mutation_Info& MUT_INFO, const Bounds& BOUNDS);
 
 	// Getters:
 	/// <summary>Getter for the length of the gene.</summary>
@@ -43,12 +50,18 @@ public:
 
 	/// <summary>Getter for the fitness of the gene.</summary>
 	/// <returns>The fitness of this gene.</returns>
-	inline double fitness(void) const;
+	inline double fitness(void) const
+	{
+		return d_fitness;
+	} // end methog fitness
 	
 	// Setters:
 	///<summary>Determines the fitness of this gene for the fitness function <paramref name="f"/> and stores it in <see cref="d_fitness"/>.</summary>
 	///<param name="f">The fitness function.</param>
-	inline void evaluate(fitnessFunction f);
+	void evaluate(fitnessFunction f)
+	{
+		d_fitness = f(&gene);
+	} // end method evaluate
 
 	// Operators:
 	/// <summary>Accessor for the component at index <paramref name="i"/>.</summary>
@@ -67,7 +80,10 @@ public:
 	/// <param name="other">The gene to compare this gene to.</param>
 	/// <returns>True iff the fitness of this gene is greater than that of the gene <paramref name="other"/>, otherwise false.</returns>
 	/// <remarks>This operator establishes a natural ordering for <see cref="std::sort"/>.</remarks>
-	inline bool operator<(const Gene& other) const;
+//	inline bool operator<(const Gene& other) const
+//	{
+//		return d_fitness < other.d_fitness;
+//	} // end operator>
 
 	// Friend declarations:
 	// Operators:
@@ -76,6 +92,8 @@ public:
 	/// <param name="geme">The gene to be inserted.</param>
 	/// <returns>The stream with the contents of <paramref name="gene"/> added to the end.</returns>
 	friend std::ostream& operator<<(std::ostream& stream, const Gene& gene);
+
+	friend bool operator<(const Gene& LHS, const Gene& RHS);
 
 	// Operations:
 	/// <summary>
@@ -98,9 +116,6 @@ public:
 
 private:
 	// Private Data Members:
-	/// <summary>Min/max value that a component of the gene can have.</summary>
-	Bounds bounds;
-
 	/// <summary>Container for the gene.</summary>
 	std::vector<double> gene;
 
