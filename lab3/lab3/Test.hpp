@@ -28,6 +28,7 @@ public:
 	/// <summary>Destructor. Frees all dynamic memory beloging to this object.</summary>
 	~Test(void);
 
+	/*
 	/// <summary>This function runs the test of the given strategy. The test is run <paramref name="ui_iterations"/> times for each cost function, and each dimension.</summary>
 	/// <typeparam name="F">A callabable type taking <typeparamref name="Args"/> as parameter list.</typeparam>
 	/// <typeparam name="Args">The parameter list for callabable type <typeparamref name="F"/>.</typeparam>
@@ -36,7 +37,8 @@ public:
 	/// <param name="args">Argument list passed on to <paramref name="f"/></param>
 	/// <returns>All output is placed into the file(s) named "results_[dimension]_f[function number].csv". Output is only generated if the variable b_storeData is set to true.</returns>
 	/// <remarks>This function is defined here because it is a template.</remarks>
-	/*template <typename F, typename... Args>
+	
+	template <typename F, typename... Args>
 	void runTest(F f, std::size_t ui_iterations, Args... args)
 	{
 		for (size_t ui_length = ui_minDimensions; ui_length <= ui_maxDimensions; ui_length += ui_dimensionDelta)
@@ -102,21 +104,24 @@ public:
 			} // end if
 		} // end for length
 	} // end template runTest
-	*/
+	/*/
+
+
+	//*/
 
 	void runTest(void);
 
-
+#pragma region Private
 private:
 	// Member Constants:
 	/// <summary>Number of iterations that the shekel's foxhole inner loop will execute.</summary>
 	const std::size_t ui_SHEKEL_M = 10;
 
 	// Member Variables:
-	/// <summary>Matrix containing the ranges of all 15 cost functions.</summary>
-	double ** da_ranges,
+	/// <summary>Array containing the bounds of all 15 cost functions.</summary>
+	Bounds * da_ranges;
 	/// <summary>Shekel's foxholes arguements.</summary>
-		   ** da_A;
+	double ** da_A;
 
 	/// <summary>Dimension info.</summary>
 	std::size_t	ui_minDimensions,
@@ -132,10 +137,7 @@ private:
 	duration	time_to_compute;
 
 	/// <summary>Vector containing pointers to the cost functions.</summary>
-	std::vector<fitnessFunction> costFunctions;
-
-	/// <summary>Vector containing the delta x values for local search.</summary>
-	std::vector<double> LS_delta;
+	std::vector<fitnessFunction> fitnessFunctions;
 
 
 	// Private Functions:
@@ -147,7 +149,7 @@ private:
 	/// <summary>Generates the matrix containing the ranges for all cost functions.</summary>
 	/// <param name="da_A">A valid pointer to an array of 15 uninitialized double pointers.</param>
 	/// <remarks>This function is only there to remove some code from the constructor, it is inline and will simply be placed in the constructor by the compiler.</remarks>
-	void makeRanges(double**& da_ranges);
+	void makeRanges(Bounds*& da_ranges);
 
 	/// <summary>Generates data file with test data.</summary>
 	/// <param name="s_name">Name of the file to dump the data into.</param>
@@ -164,6 +166,9 @@ private:
 	/// <param name="ui_dim">Dimension to insert into the name.</param>
 	/// <param name="i_functionNumber">Function number to insert into the name.</param>
 	std::string makeFileName(std::size_t ui_dim, int i_functionNumber);
+
+#pragma endregion
+
 }; // end Class Test
 
 #endif // !_TEST_H

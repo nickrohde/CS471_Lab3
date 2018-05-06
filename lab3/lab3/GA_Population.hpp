@@ -27,7 +27,10 @@ public:
 
 	// Destructor:
 	/// <summary>Releases all dynamic memory owned by this object.</summary>
-	~GA_Population(void) {}
+	~GA_Population(void)
+	{
+		probabilities.clear();
+	}
 
 	// Operations:
 	/// <summary>Finds the fitness of all members of the population and calculates the total fitness of the population.</summary>
@@ -47,6 +50,9 @@ public:
 	// Friend Declarations:
 	/// <remarks>The selection strategy requires access to the probabilities stored in the population. This allows efficient access.</remarks>
 	friend class SelectionStrategy;
+
+	/// <remarks>Move elite needs to remove old members of the population.</remarks>
+	friend void moveElite(const GA_Population * old_pop, GA_Population * new_pop, const double ER);
 
 	/// <summary>Inserts the genes <paramref name="newGenes"/> into this population.</summary>
 	/// <param name="pop">The population to insert <paramref name="newGenes"/> into.</param>

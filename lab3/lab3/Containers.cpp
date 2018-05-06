@@ -50,7 +50,7 @@ Mutation_Info::Mutation_Info(double rate, double range, double prec)
 		throw out_of_range("Mutation rate must be in range [0,1].");
 	} // end if;
 
-	d_rate = range; d_range = rate; d_precision = prec;
+	d_rate = rate; d_range = range; d_precision = prec;
 } // end Constructor
 
 

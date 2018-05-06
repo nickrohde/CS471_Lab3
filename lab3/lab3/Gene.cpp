@@ -21,7 +21,6 @@ Gene::Gene(const Gene& PARENT_A, const Gene& PARENT_B, std::size_t ui_CO_POINTS)
 
 	vector<size_t> indeces;
 
-
 	for (size_t i = 0; i < ui_CO_POINTS; i++)
 	{
 		indeces.push_back(getRandomIntInRange<size_t>(0, PARENT_A.length() - 1));
@@ -34,6 +33,8 @@ Gene::Gene(const Gene& PARENT_A, const Gene& PARENT_B, std::size_t ui_CO_POINTS)
 	indeces.push_back(ui_length);
 
 	recombine(PARENT_A, PARENT_B, &indeces);
+
+	indeces.clear();
 } // end Constructor 3
 
 
@@ -57,7 +58,9 @@ void Gene::mutate(const Mutation_Info& MUT_INFO, const Bounds& BOUNDS)
 		if (getRandomRealInRange<double>(0.0, (1.0 + std::numeric_limits<double>::min())) < MUT_INFO.d_rate)
 		{
 			double temp = (BOUNDS.d_max - BOUNDS.d_min) * MUT_INFO.d_range * pow((-1.0 * getRandomRealInRange<double>(0.0, 1.0) * MUT_INFO.d_precision), 2.0);
-			val += (getRandomIntInRange<int>(0, 2) % 2) ? (temp * -1) : (temp);
+
+			// randomly pick the sign of the mutation
+			val += (getRandomIntInRange<int>(0, 1) % 2) ? (temp * -1) : (temp);
 		} // end if
 	} // end foreach
 } // end method mutate
@@ -67,13 +70,6 @@ inline size_t Gene::length(void) const
 {
 	return ui_length;
 } // end method length
-
-
-//double Gene::fitness(void) const
-
-
-//inline void Gene::evaluate(fitnessFunction f)
-
 
 
 double& Gene::operator[](const size_t i)
@@ -96,9 +92,6 @@ double Gene::operator[](const size_t i) const
 
 	return gene.at(i);
 } // end operator[]
-
-
-//inline bool Gene::operator<(const Gene & other) const
 
  
 void Gene::recombine(const Gene & PARENT_A, const Gene & PARENT_B, const std::vector<size_t>* indeces)
@@ -126,6 +119,8 @@ void Gene::recombine(const Gene & PARENT_A, const Gene & PARENT_B, const std::ve
 			gene.push_back(temp->gene.at(k));
 		} // end for
 	} // end for
+
+	delete distribution;
 } // end method recombine
 
 
@@ -145,11 +140,3 @@ std::ostream& operator<<(std::ostream& stream, const Gene& gene)
 
 	return stream;
 } // end operator<<
-
-bool operator<(const Gene & LHS, const Gene & RHS)
-{
-	return LHS.d_fitness < RHS.d_fitness;
-} // end operator<
-
-
-

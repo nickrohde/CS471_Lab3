@@ -1,28 +1,77 @@
 #include <fstream>
 #include <sstream>
 #include "Test.hpp"
+#include <omp.h>
 
+
+#define X_OVER_POINTS 1
+#define X_OVER_RATE 0.75
+#define MUT_RATE 0.15
+#define MUT_RANGE 25.0
+#define MUT_PREC 0.89
+
+#define NUM_THREADS 16
 
 using namespace std;
 
 void Test::runTest(void)
 {
-	Mutation_Info MUT_INFO(0.15, 25, 0.89);
-	Crossing_Over_Info CR_INFO(1, 0.9);
-	Bounds bounds(-512, 512);
-	Population_Info POP_INFO(50, 20, 100, 0.2);
+	Mutation_Info MUT_INFO(MUT_RATE, MUT_RANGE, MUT_PREC);
+	Crossing_Over_Info CR_INFO(X_OVER_POINTS, X_OVER_RATE);
 
-	geneticAlgorithm(costFunctions[0], POP_INFO, bounds, MUT_INFO, CR_INFO);
+	size_t max_dim = 30;
+
+	timePoint end = highRes_Clock::now();
+	timePoint start = highRes_Clock::now();
+
+	for (size_t i = 0; i < 15; i++)
+	{
+		if (i == 14)
+		{
+			max_dim = 10;
+		}
+
+		for (size_t j = 10; j <= max_dim; j += 10)
+		{
+			Population_Info POP_INFO(100, j, 100, 0.2);
+
+			ofstream file(makeFileName(j,i), ios::app | ios::out);
+
+			double avg_time = 0.0;
+
+			#pragma omp parallel for private(res) reduction(+ : avg_time) num_threads(NUM_THREADS)
+			for (size_t k = 0; k < 100; k++)
+			{
+				results_t * res = geneticAlgorithm(fitnessFunctions[i], POP_INFO, da_ranges[i], MUT_INFO, CR_INFO);
+
+				#pragma omp critical
+				{				
+					file << res->d_bestValue << ",";
+				}
+				avg_time += res->d_avgTime;
+
+				delete res;
+			}
+
+			cout << "Average time for f_" << (i+1) << " in " << j << " dimensions: " << (avg_time / 100.0) << endl;
+			file.close();
+		}
+	}
+
+	end = highRes_Clock::now();
+
+	duration compute_time = std::chrono::duration_cast<duration>(end - start);
+	cout << "Overall time of test: " << compute_time.count() << endl;
 }
 
 
 Test::Test(void)
 {
-	da_ranges = new double*[NUMBER_FUNCTIONS]; // array containing the ranges for the RNG; [i][0] contains min, [i][1] contains max for function f_i
+	da_ranges = new Bounds[NUMBER_FUNCTIONS]; // array containing the bounds of each function
 	da_A = new double*[SHEKEL_OUTER_SIZE]; // shekels foxhole parameter that is bound to the function
 
 	// these two function only exist to make the constructor shorter
-	makeRanges(da_ranges); // make matrix with ranges for functions
+	makeRanges(da_ranges); // make array with ranges for functions
 	makeMatrix(da_A); // make matrix A for shekels foxhole
 
 	ui_minDimensions = 10;
@@ -30,11 +79,9 @@ Test::Test(void)
 	ui_dimensionDelta = 10;
 	b_storeData = true;
 
-	costFunctions = getAllCostFunctions(const_cast<const double**>(da_A), ui_SHEKEL_M); // vector containing the cost functions
+	fitnessFunctions = getAllCostFunctions(const_cast<const double**>(da_A), ui_SHEKEL_M); // vector containing the cost functions
 
 	compute_start = compute_end = highRes_Clock::now();
-
-	LS_delta = vector<double>{ 0.21,0.21,0.21,0.21,0.21,0.21,0.21,0.21,0.21,0.21,0.21,0.21,0.21,0.21,0.21 };
 } // end Default Constructor
 
 
@@ -47,16 +94,14 @@ Test::Test(vector<double>* lsd, size_t ui_dimMin, size_t ui_dimMax, size_t ui_di
 
 	compute_start = compute_end = highRes_Clock::now();
 
-	LS_delta = *lsd;
-
-	da_ranges = new double*[NUMBER_FUNCTIONS]; // array containing the ranges for the RNG; [i][0] contains min, [i][1] contains max for function f_i
+	da_ranges = new Bounds[NUMBER_FUNCTIONS]; // array containing the ranges for the RNG; [i][0] contains min, [i][1] contains max for function f_i
 	da_A = new double*[SHEKEL_OUTER_SIZE]; // shekels foxhole parameter that is bound to the function
 
 	// these two function only exist to make the constructor shorter
 	makeRanges(da_ranges); // make matrix with ranges for functions
 	makeMatrix(da_A); // make matrix A for shekels foxhole
 
-	costFunctions = getAllCostFunctions(const_cast<const double**>(da_A), ui_SHEKEL_M); // vector containing the cost functions
+	fitnessFunctions = getAllCostFunctions(const_cast<const double**>(da_A), ui_SHEKEL_M); // vector containing the cost functions
 } // end Constructor 4
 
 
@@ -82,11 +127,6 @@ Test::~Test(void)
 	{
 		if (da_ranges != nullptr)
 		{
-			for (int i = 0; i < NUMBER_FUNCTIONS; i++)
-			{
-				delete[] da_ranges[i];
-			} // end for
-
 			delete[] da_ranges;
 		} // end if
 	}
@@ -132,23 +172,23 @@ inline void Test::makeMatrix(double**& da_A)
 } // end method makeMatrix
 
 
-inline void Test::makeRanges(double**& da_ranges)
+inline void Test::makeRanges(Bounds*& da_ranges)
 {
-	da_ranges[0]  = new double[2]{ -512, 512 };
-	da_ranges[1]  = new double[2]{ -100, 100 };
-	da_ranges[2]  = new double[2]{ -100, 100 };
-	da_ranges[3]  = new double[2]{  -30,  30 };
-	da_ranges[4]  = new double[2]{ -500, 500 };
-	da_ranges[5]  = new double[2]{  -30,  30 };
-	da_ranges[6]  = new double[2]{  -30,  30 };
-	da_ranges[7]  = new double[2]{  -32,  32 };
-	da_ranges[8]  = new double[2]{  -32,  32 };
-	da_ranges[9]  = new double[2]{ -500, 500 };
-	da_ranges[10] = new double[2]{ -500, 500 };
-	da_ranges[11] = new double[2]{ -100, 100 };
-	da_ranges[12] = new double[2]{    0, _PI };
-	da_ranges[13] = new double[2]{  -30,  30 };
-	da_ranges[14] = new double[2]{    0,  10 };
+	da_ranges[0]  = Bounds(-512.0, 512.0);
+	da_ranges[1]  = Bounds(-100.0, 100.0);
+	da_ranges[2]  = Bounds(-100.0, 100.0);
+	da_ranges[3]  = Bounds(-30.0,   30.0);
+	da_ranges[4]  = Bounds(-500.0, 500.0);
+	da_ranges[5]  = Bounds(-30.0,   30.0);
+	da_ranges[6]  = Bounds(-30.0,   30.0);
+	da_ranges[7]  = Bounds(-32.0,   32.0);
+	da_ranges[8]  = Bounds(-32.0,   32.0);
+	da_ranges[9]  = Bounds(-500.0, 500.0);
+	da_ranges[10] = Bounds(-500.0, 500.0);
+	da_ranges[11] = Bounds(-100.0, 100.0);
+	da_ranges[12] = Bounds(   0.0,  _PI );
+	da_ranges[13] = Bounds(- 30.0,  30.0);
+	da_ranges[14] = Bounds(   0.0,  10.0);
 } // end method makeRanges
 
 
@@ -156,8 +196,11 @@ void Test::dumpDataToFile(string s_name, results_t* res)
 {
 	ofstream file(s_name, ios::out | ios::app);
 
-	file << "\n";
-	
+	if (!file.bad() && file.is_open())
+	{
+		file << res->d_bestValue << "\n";
+	} // end if
+
 	file.close();
 } // end dumpDataToFile
 
@@ -166,7 +209,10 @@ void Test::writeResultsToFile(results_t* res)
 {
 	ofstream file("results.csv", ios::out | ios::app);
 
-	file << *res;
+	if (!file.bad() && file.is_open())
+	{
+		file << *res;
+	} // end if
 
 	file.close();
 } // end method 

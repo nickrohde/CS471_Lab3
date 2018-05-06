@@ -11,16 +11,19 @@ results_t* geneticAlgorithm(fitnessFunction f, const Population_Info& POP_INFO, 
 	// initial population
 	GA_Population* current = new GA_Population(POP_INFO.ui_SIZE, POP_INFO.ui_GENE_DIM, BOUNDS);
 
+	timePoint end = highRes_Clock::now();
+	timePoint start = highRes_Clock::now();
+
 	for (size_t i = 0; i < POP_INFO.ui_GENERATIONS; i++)
 	{
+		GA_Population* next_pop = new GA_Population();
+
 		// find the fitness of the population and sort it
 		current->evaluateAll(f);
 		current->sort();
 
 		// calculate probabilities for selecting an individual from the population
 		current->findProbabilities(f);
-
-		GA_Population* next_pop = new GA_Population();
 
 		moveElite(current, next_pop, POP_INFO.d_ELITISM_RATE);
 
@@ -35,11 +38,23 @@ results_t* geneticAlgorithm(fitnessFunction f, const Population_Info& POP_INFO, 
 				g.mutate(MUT_INFO, BOUNDS);
 				(*next_pop) << &g;
 			} // end for g
+
+			// pointers need to be manually deleted as Parents/Offspring does not know about Gene class
+			delete parents->parent_A;
+			delete parents->parent_B;
+			delete parents;
+
+			offspring->offsprings.clear();
+			delete offspring;
 		} // end for j
 
 		delete current;
 		current = next_pop;
 	} // end for
+
+	end = highRes_Clock::now();
+
+	duration compute_time = std::chrono::duration_cast<duration>(end - start);
 
 	// find final solution
 	current->evaluateAll(f);
@@ -47,6 +62,9 @@ results_t* geneticAlgorithm(fitnessFunction f, const Population_Info& POP_INFO, 
 
 	// save best solution
 	res->operator=(&(*current)[0]);
+	res->d_avgTime = compute_time.count();
+
+	delete current;
 
 	return res;
 } // end method geneticAlgorithm

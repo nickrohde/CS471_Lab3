@@ -31,6 +31,7 @@ public:
 	/// <summary>Releases all dynamic memory owned by this object.</summary>
 	~Population(void)
 	{
+		genes.clear();
 	}
 
 	// Operations:

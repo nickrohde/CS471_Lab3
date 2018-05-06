@@ -48,7 +48,7 @@ char Driver::getChoice(void)
 
 		c = static_cast<char>(tolower(static_cast<char>(c)));
 
-	} while (c != '1' && c != '2' && c != '3' && c != 'q');
+	} while (c != '1' && c != '2' && c != 'q');
 
 	return c;
 } // end method getChoice

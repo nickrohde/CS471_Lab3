@@ -35,7 +35,6 @@ int main(int argc, char ** argv)
 		i_exitCode = driver->run();
 	} // end if
 
-
 	try
 	{
 		if (driver->isValid())

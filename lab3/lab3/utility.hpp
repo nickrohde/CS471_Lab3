@@ -243,14 +243,68 @@ inline double getDistance(T a, T b)
 	return sqrt(pow((b - a), 2));
 } // end template getDistance
 
-/*
-///<summary>Exception for function that are not yet implemented.</summary>
-class not_implemented : public std::logic_error
+  /// <summary>Swaps the two elements in <paramref name="vect"/> at indices <paramref name="i"/> and <paramref name="j"/>.</summary>
+  /// <typeparam name="T">A comparable type.</typeparam>
+  /// <param name="vect">The vector to make the swaps in.</param>
+  /// <param name="i">The first index.</param>
+  /// <param name="i">The second index.</param>
+template <typename T>
+void vector_swap(std::vector<T> &vect, std::size_t i, std::size_t j)
 {
-public:
-	/// <summary>Exception constructor.</summary>
-	not_implemented() : std::logic_error("Function not implemented") { }
-}; // end Class NotImplementedException
-*/
+	T temp = vect[x];
+	vect[x] = vect[y];
+	vect[y] = temp;
+} // end template swap
+
+
+/// <summary>Sorts the vector <paramref name="vect"/> in ascending order.</summary>
+/// <typeparam name="T">A comparable type.</typeparam>
+/// <param name="vect">The vector to sort.</param>
+/// <param name="ui_left">Starting index for sorting.</param>
+/// <param name="ui_right">Ending index for sorting.</param>
+template <typename T>
+void vector_quicksort(std::vector<T> &vect, std::size_t ui_left, std::size_t ui_right)
+{
+	std::size_t	i = ui_left,
+				j = ui_right;
+
+	T			pivot = vect[(ui_left + (ui_right - ui_left))];
+
+	while (i < ui_right || j > ui_left)
+	{
+		while (vect[i] < pivot)
+		{
+			i++;
+		} // end while
+		while (vect[j] > pivot)
+		{
+			j--;
+		} // end while
+
+		if (i <= j) 
+		{
+			vector_swap(vect, i, j);
+			i++;
+			j--;
+		} // end if
+		else 
+		{
+			if (i < ui_right)
+			{
+				quicksort(vect, i, ui_right);
+			} // end if
+			if (j > ui_left)
+			{
+				quicksort(vect, ui_left, j);
+			} // end if
+
+			break;
+		} // end else
+	} // end while
+} // end template vector_quicksort
+
+
+
+
 #endif
 
