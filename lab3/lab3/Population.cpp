@@ -5,13 +5,14 @@ using namespace std;
 Population::Population(void)
 {
 	ui_size = 0;
+	b_isSorted = false;
 } // end Default Constructor
 
 
 Population::Population(const size_t ui_SIZE, const size_t ui_DIM, const Bounds& BOUNDS)
 {
 	ui_size = ui_SIZE;
-
+	b_isSorted = false;
 	bounds = BOUNDS;
 
 	genes = GenePool(ui_SIZE);
@@ -26,13 +27,10 @@ Population::Population(const size_t ui_SIZE, const size_t ui_DIM, const Bounds& 
 Population::Population(const Population & other)
 {
 	ui_size = other.ui_size;
+	b_isSorted = other.b_isSorted;
 
 	std::copy(other.genes.begin(), other.genes.end(), genes.begin());
 } // end Copy Constructor
-
-
-//inline size_t Population::size(void) const
-
 
 
 inline Gene& Population::operator[](const size_t i)
@@ -55,10 +53,6 @@ inline Gene Population::operator[](const size_t i) const
 
 	return genes.at(i);
 } // end operator[]
-
-
-//inline void Population::sort(void)
-
 
 
 ostream& operator<<(ostream& stream, const Population& pop)

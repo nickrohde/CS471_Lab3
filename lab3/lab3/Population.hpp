@@ -35,22 +35,28 @@ public:
 	}
 
 	// Operations:
-	/// <summary>Sorts this population in ascending order.</summary>
+	/// <summary>Sorts this population in ascending order if it isn't already sorted.</summary>
 	void sort(void)
 	{
-		for (std::size_t i = 0; i < genes.size() - 1; i++)
+		if (!b_isSorted) // only sort if needed
 		{
-			for (std::size_t j = 0; j < genes.size() - i - 1; j++)
-			{
-				if (genes[j + 1] < genes[j])
-				{
-					Gene temp = genes[j + 1];
-					genes[j + 1] = genes[j];
-					genes[j] = temp;
-				} // end if
-			} // end for j
-		} // end for i
-		//std::sort(genes.begin(), genes.end(), std::less<Gene>());
+			b_isSorted = true;
+
+			vector_quickSort(genes.begin(), genes.end());
+
+			//for (std::size_t i = 0; i < genes.size() - 1; i++)
+			//{
+			//	for (std::size_t j = 0; j < genes.size() - i - 1; j++)
+			//	{
+			//		if (genes[j + 1] < genes[j])
+			//		{
+			//			Gene temp = genes[j + 1];
+			//			genes[j + 1] = genes[j];
+			//			genes[j] = temp;
+			//		} // end if
+			//	} // end for j
+			//} // end for i
+		} // end if
 	} // end method sort
 
 	/// <summary>Evaluates the fitness of all members of the population.</summary>
@@ -95,6 +101,8 @@ public:
 
 	/// <summary>Min/max value that a component of the gene can have.</summary>
 	Bounds bounds;
+
+	bool b_isSorted;
 
 }; // end Class Population
 

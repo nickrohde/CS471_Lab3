@@ -7,7 +7,9 @@
 #include "results.hpp"
 #include <functional>
 
-typedef std::function<results_t*(fitnessFunction, const Population_Info, const Bounds, const Mutation_Info, const Crossing_Over_Info)> DE_Function;
+
+///<summary>Improves readibility and is more convenient.</summary>
+typedef std::function<Gene*(const DE_Population& POP, const Bounds& BOUNDS, const DE_Info& DE_INFO)> DE_Function;
 
 ///<summary>Enum for the 10 Differential Evolution Strategies.</summary>
 enum DE_Strategy
@@ -39,22 +41,27 @@ enum DE_Strategy
 /// <param name="CR_INFO">Info regarding crossing over, s.a. rate, etc.</param>
 /// <param name="t">The type of strategy to use.</param>
 /// <returns>The optimal solution to <paramref name="f"/> found using the DE strategy <paramref name="t"/>.</returns>
-results_t* differentialEvolution(fitnessFunction f, const Population_Info POP_INFO, const Bounds BOUNDS, const Mutation_Info MUT_INFO, const Crossing_Over_Info CR_INFO, DE_Strategy t);
+results_t* differentialEvolution(fitnessFunction f, const Population_Info& POP_INFO, const Bounds& BOUNDS, const Mutation_Info& MUT_INFO, const Crossing_Over_Info& CR_INFO, DE_Strategy t);
 
-results_t* best_1_exp(fitnessFunction f, const Population_Info POP_INFO, const Bounds BOUNDS, const Mutation_Info MUT_INFO, const Crossing_Over_Info CR_INFO);
-results_t* best_2_exp(fitnessFunction f, const Population_Info POP_INFO, const Bounds BOUNDS, const Mutation_Info MUT_INFO, const Crossing_Over_Info CR_INFO);
+/// <summary>Creates a pointer to the <see cref="DE_Function"/> (strategy) of type <paramref name="t"/>.</summary>
+/// <returns>A pointer to the requested <see cref="DE_Function"/>.</returns>
+DE_Function differentialEvolutionHelper(DE_Strategy t);
 
-results_t* best_1_bin(fitnessFunction f, const Population_Info POP_INFO, const Bounds BOUNDS, const Mutation_Info MUT_INFO, const Crossing_Over_Info CR_INFO);
-results_t* best_2_bin(fitnessFunction f, const Population_Info POP_INFO, const Bounds BOUNDS, const Mutation_Info MUT_INFO, const Crossing_Over_Info CR_INFO);
 
-results_t* rand_1_exp(fitnessFunction f, const Population_Info POP_INFO, const Bounds BOUNDS, const Mutation_Info MUT_INFO, const Crossing_Over_Info CR_INFO);
-results_t* rand_2_exp(fitnessFunction f, const Population_Info POP_INFO, const Bounds BOUNDS, const Mutation_Info MUT_INFO, const Crossing_Over_Info CR_INFO);
+Gene* best_1_exp(const DE_Population& POP, const Bounds& BOUNDS, const DE_Info& DE_INFO);
+Gene* best_2_exp(const DE_Population& POP, const Bounds& BOUNDS, const DE_Info& DE_INFO);
 
-results_t* rand_1_bin(fitnessFunction f, const Population_Info POP_INFO, const Bounds BOUNDS, const Mutation_Info MUT_INFO, const Crossing_Over_Info CR_INFO);
-results_t* rand_2_bin(fitnessFunction f, const Population_Info POP_INFO, const Bounds BOUNDS, const Mutation_Info MUT_INFO, const Crossing_Over_Info CR_INFO);
+Gene* best_1_bin(const DE_Population& POP, const Bounds& BOUNDS, const DE_Info& DE_INFO);
+Gene* best_2_bin(const DE_Population& POP, const Bounds& BOUNDS, const DE_Info& DE_INFO);
 
-results_t* rtb_1_exp(fitnessFunction f, const Population_Info POP_INFO, const Bounds BOUNDS, const Mutation_Info MUT_INFO, const Crossing_Over_Info CR_INFO);
-results_t* rtb_1_bin(fitnessFunction f, const Population_Info POP_INFO, const Bounds BOUNDS, const Mutation_Info MUT_INFO, const Crossing_Over_Info CR_INFO);
+Gene* rand_1_exp(const DE_Population& POP, const Bounds& BOUNDS, const DE_Info& DE_INFO);
+Gene* rand_2_exp(const DE_Population& POP, const Bounds& BOUNDS, const DE_Info& DE_INFO);
+
+Gene* rand_1_bin(const DE_Population& POP, const Bounds& BOUNDS, const DE_Info& DE_INFO);
+Gene* rand_2_bin(const DE_Population& POP, const Bounds& BOUNDS, const DE_Info& DE_INFO);
+
+Gene* rtb_1_exp(const DE_Population& POP, const Bounds& BOUNDS, const DE_Info& DE_INFO);
+Gene* rtb_1_bin(const DE_Population& POP, const Bounds& BOUNDS, const DE_Info& DE_INFO);
 
 
 

@@ -6,16 +6,14 @@ GA_Population::GA_Population(const GA_Population & other) : Population(other)
 {
 	this->d_totalFitness = other.d_totalFitness;
 	this->probabilities = other.probabilities;
+	this->b_isSorted = other.b_isSorted;
 } // end Copy Constructor
-
-
-/*
-void GA_Population::evaluateAll(fitnessFunction f)
-*/
 
 
 void GA_Population::findProbabilities(fitnessFunction f)
 {
+	sort(); // ensure population is sorted
+
 	double  d_worst = genes[size() - 1].fitness(),
 			d_offset = 0.0;
 
@@ -51,6 +49,8 @@ GA_Population & operator<<(GA_Population & pop, const Offspring * newGenes)
 
 GA_Population & operator<<(GA_Population & pop, const Gene * newGene)
 {
+	pop.b_isSorted = false;
+
 	if (pop.genes.size() > 0)
 	{
 		if (newGene->length() != pop.genes.at(0).length())

@@ -31,6 +31,7 @@ void Test::runTest(void)
 			max_dim = 10;
 		}
 
+	#pragma omp parallel for private(res, POP_INFO) reduction(+ : avg_time) num_threads(NUM_THREADS)
 		for (size_t j = 10; j <= max_dim; j += 10)
 		{
 			Population_Info POP_INFO(100, j, 100, 0.2);
@@ -39,21 +40,20 @@ void Test::runTest(void)
 
 			double avg_time = 0.0;
 
-			#pragma omp parallel for private(res) reduction(+ : avg_time) num_threads(NUM_THREADS)
 			for (size_t k = 0; k < 100; k++)
 			{
 				results_t * res = geneticAlgorithm(fitnessFunctions[i], POP_INFO, da_ranges[i], MUT_INFO, CR_INFO);
+			
+				file << res->d_bestValue << ",";
 
-				#pragma omp critical
-				{				
-					file << res->d_bestValue << ",";
-				}
 				avg_time += res->d_avgTime;
 
 				delete res;
 			}
-
-			cout << "Average time for f_" << (i+1) << " in " << j << " dimensions: " << (avg_time / 100.0) << endl;
+			#pragma omp critical
+			{
+				cout << "Average time for f_" << (i + 1) << " in " << j << " dimensions: " << (avg_time / 100.0) << endl;
+			}
 			file.close();
 		}
 	}

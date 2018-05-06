@@ -37,6 +37,8 @@ public:
 	/// <param name="f">The fitness function to evaluate the population on.</param>
 	virtual void evaluateAll(fitnessFunction f)
 	{
+		b_isSorted = false;
+
 		for (auto& g : genes)
 		{
 			g.evaluate(f);

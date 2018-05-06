@@ -100,3 +100,4 @@ Offspring* crossingOver(const Gene* PARENT_A, const Gene* PARENT_B, const Crossi
 
 	return res;
 } // end method crossingOver
+

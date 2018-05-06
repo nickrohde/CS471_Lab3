@@ -59,7 +59,8 @@ inline double rastriginFunction(const std::vector<double>* vect)
 		total += ((pow(vect->at(i), 2)) - (10 * (cos(2 * _PI * vect->at(i)))));	// x_i^2 - 10cos(2pi * x_i)
 	} // end for
 
-	total += (10 * vect->size()) - (200 * vect->size()); // 10*n + SUM -- shift down by -200n to move optimal point from 0 to -200n
+	total += (10 * vect->size()); 
+	total -= (200 * vect->size()); // 10*n + SUM -- shift down by -200n to move optimal point from 0 to -200n
 
 	return total;
 } // end method rastriginFunction                                     

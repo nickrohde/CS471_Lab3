@@ -32,18 +32,15 @@ public:
 	/// <param name="f">The fitness function to evaluate the population on.</param>
 	virtual void evaluateAll(fitnessFunction f)
 	{
+		b_isSorted = false;
+
 		for (auto& g : genes)
 		{
 			g.evaluate(f);
 		} // end for
 	} // end method evaluateAll
-	
-	// Iterators:
-	/// <summary>Getter for an iterator to the start of the population.</summary>
-	inline std::vector<Gene>::iterator begin(void);
 
-	/// <summary>Getter for an iterator to the end of the population.</summary>
-	inline std::vector<Gene>::iterator end(void);
+	Gene* best(void);
 
 
 }; // end Class DE_Population
