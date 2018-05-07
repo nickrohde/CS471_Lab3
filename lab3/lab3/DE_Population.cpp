@@ -8,5 +8,10 @@ DE_Population::DE_Population(const DE_Population & other) : Population(other)
 
 Gene * DE_Population::best(void)
 {
-	return nullptr;
+	if (!b_isSorted)
+	{
+		sort();
+	}
+
+	return &(genes[0]);
 }

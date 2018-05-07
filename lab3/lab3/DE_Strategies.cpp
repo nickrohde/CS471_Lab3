@@ -3,15 +3,35 @@
 using namespace std;
 
 
-results_t* differentialEvolution(fitnessFunction f, const Population_Info& POP_INFO, const Bounds& BOUNDS, const Mutation_Info& MUT_INFO, const Crossing_Over_Info& CR_INFO, DE_Strategy t)
+results_t* DifferentialEvolution::differentialEvolution(fitnessFunction f, const DE_Info& DE_INFO, const Population_Info& POP_INFO, const Bounds& BOUNDS, const Mutation_Info& MUT_INFO, const Crossing_Over_Info& CR_INFO, DE_Strategy t)
 {
 	DE_Function genNoiseVector = differentialEvolutionHelper(t);
 
+	DE_Population* current = new DE_Population(POP_INFO.ui_SIZE, POP_INFO.ui_GENE_DIM, BOUNDS);
+
 	for (size_t gen = 0; gen < POP_INFO.ui_GENERATIONS; gen++)
 	{
+		DE_Population* new_pop = new DE_Population();
 
+		current->evaluateAll(f);
 
+		for (size_t i = 0; i < POP_INFO.ui_SIZE; i++)
+		{
+			Gene * noise = genNoiseVector(*current, BOUNDS, DE_INFO);
 
+			noise->evaluate(f);
+
+			if (noise->d_fitness < (*current)[i].d_fitness)
+			{
+				new_pop->genes.push_back(*noise);
+			} // end if
+			else
+			{
+				new_pop->genes.push_back((*current)[i]);
+			} // end else
+
+			delete noise;
+		} // end for
 
 	} // end for
 
@@ -19,7 +39,7 @@ results_t* differentialEvolution(fitnessFunction f, const Population_Info& POP_I
 } // end method differentialEvolution
 
 
-DE_Function differentialEvolutionHelper(DE_Strategy t)
+DE_Function DifferentialEvolution::differentialEvolutionHelper(DE_Strategy t)
 {
 	DE_Function g;
 
@@ -64,78 +84,116 @@ DE_Function differentialEvolutionHelper(DE_Strategy t)
 } // end differentialEvolutionHelper
 
 
-Gene * best_1_exp(const DE_Population& POP, const Bounds& BOUNDS, const DE_Info& DE_INFO)
+Gene * DifferentialEvolution::best_1(DE_Population& POP, std::size_t i, const DE_Info& DE_INFO)
 {
-	//Gene* best = POP.best();
+	Gene* noise = new Gene();
 
+	noise->gene.clear();
+	noise->gene = vector<double>(POP[0].length());
 
-	size_t	j = getRandomIntInRange<size_t>(0, POP[0].length()), // random starting index
-			position = 0; // position in the circur vector (counter)
+	double F = getRandomRealInRange<double>(0.5, _ONE);
 
-	do
+	for (size_t j = 0; j < POP[0].length(); j++)
 	{
-		
+		size_t	r1 = getRandomIntInRange<size_t>(0, POP.size()),
+				r2 = getRandomIntInRange<size_t>(0, POP.size());
 
-	} while (getRandomRealInRange<double>(0, _ONE) < DE_INFO.d_CR && position < POP[0].length());
+		// ensure i, r1, r2 are unique
+		while (i == r1 || i == r2 || r1 == r2)
+		{
+			r1 = getRandomIntInRange<size_t>(0, POP.size());
+			r2 = getRandomIntInRange<size_t>(0, POP.size());
+		} // end while
 
+		noise->gene[j] = (best(POP, j) + strat1(POP, F, j, r1, r2));
+	} // end for
 
-
-	throw std::logic_error("Not Implemented");
+	return noise;
 } // end method best_1_exp
 
 
-Gene * best_2_exp(const DE_Population& POP, const Bounds& BOUNDS, const DE_Info& DE_INFO)
+Gene * DifferentialEvolution::best_2(DE_Population& POP, std::size_t i, const DE_Info& DE_INFO)
 {
-	throw std::logic_error("Not Implemented");
+	Gene* noise = new Gene();
+
+	noise->gene.clear();
+	noise->gene = vector<double>(POP[0].length());
+
+	double F = getRandomRealInRange<double>(0.5, _ONE);
+
+	for (size_t j = 0; j < POP[0].length(); j++)
+	{
+		size_t	r1 = getRandomIntInRange<size_t>(0, POP.size()),
+				r2 = getRandomIntInRange<size_t>(0, POP.size()),
+				r3 = getRandomIntInRange<size_t>(0, POP.size()),
+				r4 = getRandomIntInRange<size_t>(0, POP.size());
+
+		// ensure i, r1, r2 are unique
+		while (UNIQUE_5(i, r1, r2, r3, r4))
+		{
+			r1 = getRandomIntInRange<size_t>(0, POP.size());
+			r2 = getRandomIntInRange<size_t>(0, POP.size());
+		} // end while
+
+		noise->gene[j] = (best(POP, j) + strat1(POP, F, j, r1, r2));
+	} // end for
+
+	return noise;
 } // end method best_2_exp
 
 
-Gene * best_1_bin(const DE_Population& POP, const Bounds& BOUNDS, const DE_Info& DE_INFO)
-{
-	throw std::logic_error("Not Implemented");
-} // end method best_1_bin
-
-
-Gene * best_2_bin(const DE_Population& POP, const Bounds& BOUNDS, const DE_Info& DE_INFO)
-{
-	throw std::logic_error("Not Implemented");
-} // end method best_2_bin
-
-
-Gene * rand_1_exp(const DE_Population& POP, const Bounds& BOUNDS, const DE_Info& DE_INFO)
+Gene * DifferentialEvolution::rand_1(DE_Population& POP, std::size_t i, const DE_Info& DE_INFO)
 {
 	throw std::logic_error("Not Implemented");
 } // end method rand_1_exp
 
 
-Gene * rand_2_exp(const DE_Population& POP, const Bounds& BOUNDS, const DE_Info& DE_INFO)
+Gene * DifferentialEvolution::rand_2(DE_Population& POP, std::size_t i, const DE_Info& DE_INFO)
 {
 	throw std::logic_error("Not Implemented");
 } // end method rand_2_exp
 
 
-Gene * rand_1_bin(const DE_Population& POP, const Bounds& BOUNDS, const DE_Info& DE_INFO)
-{
-	throw std::logic_error("Not Implemented");
-} // end method rand_1_bin
-
-
-Gene * rand_2_bin(const DE_Population& POP, const Bounds& BOUNDS, const DE_Info& DE_INFO)
-{
-	throw std::logic_error("Not Implemented");
-} // end method rand_2_bin
-
-
-Gene * rtb_1_exp(const DE_Population& POP, const Bounds& BOUNDS, const DE_Info& DE_INFO)
+Gene * DifferentialEvolution::rtb_1(DE_Population& POP, std::size_t i, const DE_Info& DE_INFO)
 {
 	throw std::logic_error("Not Implemented");
 } // end method rtb_1_exp
 
 
-Gene * rtb_1_bin(const DE_Population& POP, const Bounds& BOUNDS, const DE_Info& DE_INFO)
+double DifferentialEvolution::best(DE_Population & POP, const size_t j)
 {
-	throw std::logic_error("Not Implemented");
-} // end method rtb_1_bin
+	return POP.best()->gene[j];
+}
+
+double DifferentialEvolution::strat1(DE_Population & POP, double F, std::size_t j, std::size_t r1, std::size_t r2)
+{
+	double temp = 0.0;
+
+	temp = F * (POP[r1].gene[j] - POP[r2].gene[j]);
+
+	return temp;
+}
+
+double DifferentialEvolution::start2(DE_Population & POP, double F, std::size_t j, std::size_t r1, std::size_t r2, std::size_t r3, std::size_t r4)
+{
+	double temp = 0.0;
+
+	temp = F * (POP[r1].gene[j] + POP[r2].gene[j] - POP[r3].gene[j] - POP[r4].gene[j]);
+
+	return temp;
+}
+
+double DifferentialEvolution::strat3(DE_Population & POP, double F, double lambda, std::size_t j, std::size_t i, std::size_t r1, std::size_t r2)
+{
+	double temp = 0.0;
+
+	temp = lambda * (best(POP, j) - POP[i].gene[j]) + F * (POP[r1].gene[j] - POP[r2].gene[j]);
+
+	return temp;
+}
+
+
+
 
 
 

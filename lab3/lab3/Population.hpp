@@ -43,19 +43,6 @@ public:
 			b_isSorted = true;
 
 			vector_quickSort(genes.begin(), genes.end());
-
-			//for (std::size_t i = 0; i < genes.size() - 1; i++)
-			//{
-			//	for (std::size_t j = 0; j < genes.size() - i - 1; j++)
-			//	{
-			//		if (genes[j + 1] < genes[j])
-			//		{
-			//			Gene temp = genes[j + 1];
-			//			genes[j + 1] = genes[j];
-			//			genes[j] = temp;
-			//		} // end if
-			//	} // end for j
-			//} // end for i
 		} // end if
 	} // end method sort
 

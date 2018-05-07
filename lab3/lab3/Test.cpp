@@ -4,7 +4,7 @@
 #include <omp.h>
 
 
-#define X_OVER_POINTS 1
+#define X_OVER_POINTS 4
 #define X_OVER_RATE 0.75
 #define MUT_RATE 0.15
 #define MUT_RANGE 25.0
@@ -24,6 +24,10 @@ void Test::runTest(void)
 	timePoint end = highRes_Clock::now();
 	timePoint start = highRes_Clock::now();
 
+	results_t* res;
+	Population_Info POP_INFO;
+	double avg_time = 0.0;
+
 	for (size_t i = 0; i < 15; i++)
 	{
 		if (i == 14)
@@ -32,17 +36,17 @@ void Test::runTest(void)
 		}
 
 	#pragma omp parallel for private(res, POP_INFO) reduction(+ : avg_time) num_threads(NUM_THREADS)
-		for (size_t j = 10; j <= max_dim; j += 10)
+		for (int j = 10; j <= max_dim; j += 10)
 		{
-			Population_Info POP_INFO(100, j, 100, 0.2);
+			POP_INFO = Population_Info(100, j, 100, 0.2);
 
 			ofstream file(makeFileName(j,i), ios::app | ios::out);
 
-			double avg_time = 0.0;
+			avg_time = 0.0;
 
 			for (size_t k = 0; k < 100; k++)
 			{
-				results_t * res = geneticAlgorithm(fitnessFunctions[i], POP_INFO, da_ranges[i], MUT_INFO, CR_INFO);
+				res = geneticAlgorithm(fitnessFunctions[i], POP_INFO, da_ranges[i], MUT_INFO, CR_INFO);
 			
 				file << res->d_bestValue << ",";
 

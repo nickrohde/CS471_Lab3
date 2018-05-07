@@ -118,6 +118,7 @@ public:
 		
 	/// <remarks>Differential evolution requires direct access to the gene.</remarks>
 	friend class DE_Population;
+	friend class DifferentialEvolution;
 
 private:
 	// Private Data Members:
