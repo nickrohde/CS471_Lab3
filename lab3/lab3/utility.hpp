@@ -119,27 +119,23 @@ void genPermutation(T* numbers, std::size_t N, T* results, const std::size_t M, 
 	static std::random_device rd{};
 	static std::mt19937 engine{ rd() };
 
-	#pragma omp critical
+	// randomly shuffle the array elements around
+	for (size_t i = 0; i < M+1; i++) 
 	{
-		// randomly shuffle the array elements around
-		for (size_t i = 0; i < M+1; i++) 
+		size_t j = getRandomIntInRange<size_t>(i, N-1);
+		auto temp = numbers[i]; 
+		numbers[i] = numbers[j];
+		numbers[j] = temp;
+	} // end for
+	// get the permutation from the first n indeces
+	for (size_t i = 0, j = 0; j < M; i++)
+	{
+		if (numbers[i] != excluded)
 		{
-			size_t j = getRandomIntInRange<size_t>(i, N-1);
-			auto temp = numbers[i]; 
-			numbers[i] = numbers[j];
-			numbers[j] = temp;
-		} // end for
-		// get the permutation from the first n indeces
-		for (size_t i = 0, j = 0; i < N; i++)
-		{
-			if (numbers[i] != excluded)
-			{
-				results[j] = numbers[i];
-				j++;
-			} // end if
-		} // end for
-
-	} // end critical section
+			results[j] = numbers[i];
+			j++;
+		} // end if
+	} // end for
 } // end template genPermutation
 
 

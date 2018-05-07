@@ -92,14 +92,16 @@ void Test::runTest(void)
 
 	results_t* res;
 	Population_Info POP_INFO;
-	double avg_time = 0.0;
+	double* avg_time = new double[3];
 
-	size_t* numbers = new size_t[POP_SIZE];
 
-	for (size_t i = 0; i < POP_SIZE; i++)
-	{
-		numbers[i] = i;
-	}
+	size_t* numbers;
+
+	double** data = new double*[3];
+	data[0] = new double[100];
+	data[1] = new double[100];
+	data[2] = new double[100];
+
 
 	for (size_t i = 0; i < 15; i++)
 	{
@@ -108,44 +110,82 @@ void Test::runTest(void)
 			max_dim = 10;
 		}
 
-		ofstream file(makeFileName(10, i), ios::app | ios::out);
+		avg_time[0] = 0.0;
+		avg_time[1] = 0.0;
+		avg_time[2] = 0.0;
 
-		for (int j = 10; j <= max_dim; j += 10)
+		int j = 10;
+		#pragma omp parallel for private(numbers, res, POP_INFO, j) num_threads(NUM_THREADS)
+		for (j = 10; j <= max_dim; j += 10)
 		{
 			POP_INFO = Population_Info(POP_SIZE, j, NUM_GEN, ER);
 
-			avg_time = 0.0;
+			numbers = new size_t[POP_SIZE];
+
+			for (size_t z = 0; z < POP_SIZE; z++)
+			{
+				numbers[z] = z;
+			}
 
 			for (size_t k = 0; k < 100; k++)
 			{
-				res = DifferentialEvolution::differentialEvolution(fitnessFunctions[i], POP_INFO, da_ranges[i], CR_INFO, DE_Strategy::DE_RAND_1_BIN, numbers);
+				res = DifferentialEvolution::differentialEvolution(fitnessFunctions[i], POP_INFO, da_ranges[i], CR_INFO, DE_Strategy::DE_BEST_2_BIN, numbers);
 
-				file << res->d_bestValue;
+				data[(j/10)-1][i] = res->d_bestValue;
 
-				if (k < 99)
+				#pragma omp critical
 				{
-					file << ",";
+					avg_time[(j/10)-1] += res->d_avgTime;
 				}
-				std::cout << res->d_bestValue << ", ";
-				
-
-				avg_time += res->d_avgTime;
 
 				delete res;
 			}
 
-			std::cout << "Average time for f_" << (i + 1) << " in " << j << " dimensions: " << (avg_time / 100.0) << endl;
-		}
+			delete[] numbers;
+		} // end for j
 
-		file.close();
+		for(size_t k = 0; k < 3; k++)
+		{
+			ofstream file2("times.txt", ios::app | ios::out);
+
+			file2 << (avg_time[k] / 100);
+
+			if (k < 2)
+			{
+				file2 << ", ";
+			}
+			else
+			{
+				file2 << "\n";
+			}
+
+			file2.close();
+
+			ofstream file(makeFileName(10*(k+1), i), ios::app | ios::out);
+
+			for (size_t j = 0; j < 100; j++)
+			{
+				file << data[k][i];
+
+				if (j < 99)
+				{
+					file << ",";
+				}
+			}
+			file.close();
+		}
 	}
+
+	delete[] data[0];
+	delete[] data[1];
+	delete[] data[2];
+	delete[] data;
 
 	end = highRes_Clock::now();
 
-	delete[] numbers;
 
 	duration compute_time = std::chrono::duration_cast<duration>(end - start);
-	cout << "Overall time of test: " << compute_time.count() << endl;
+	std::cout << "Overall time of test: " << compute_time.count() << endl;
 }
 
 //*/
