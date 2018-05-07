@@ -1,0 +1,29 @@
+	size_t 		   j	= getRandomIntInRange<size_t>(0, POP[0].length()), // random starting index
+				  r1	= getRandomIntInRange<size_t>(0, POP[0].length()),
+				  r2	= getRandomIntInRange<size_t>(0, POP[0].length());
+
+	double F = getRandomRealInRange<double>(0.5, _ONE);
+
+	// ensure i, r1, r2 are unique
+	while (i == r1 || i == r2 || r1 == r2)
+	{
+		r1 = getRandomIntInRange<size_t>(0, POP[0].length());
+		r2 = getRandomIntInRange<size_t>(0, POP[0].length());
+	} // end while
+
+	noise->gene.clear();
+	noise->gene = vector<double>(POP[0].length());
+
+	do
+	{
+		noise->gene[j] = (best->gene[j] + F * (POP[r1].gene[j] - POP[r2].gene[j]));
+		position++;
+		j = (j + 1) % POP[0].length();
+	} while (getRandomRealInRange<double>(0, _ONE) < DE_INFO.d_CR && position < POP[0].length());
+
+	while (position < POP[0].length())
+	{
+		noise->gene[j] = best->gene[j];
+		position++;
+		j = (j + 1) % POP[0].length();
+	} // end while
