@@ -77,6 +77,11 @@ public:
 	/// <returns>The stream with the contents of <paramref name="pop"/> added to the end.</returns>
 	friend std::ostream& operator<<(std::ostream& stream, const Population& pop);
 
+	/// <summary>Adds the gene <paramref name="newGene"/> to this population.</summary>
+	/// <param name="newGene">The new gene that will be added to this population.</param>
+	/// <remarks>The gene to be added must be compatible, i.e. of the same length as the genes already in this population.</remarks>
+	/// <exception name="std::invalid_argument">Thrown if <paramref name="newGene"/> is not the same length as all other genes in this population.</exception>
+	friend Population& operator<<(Population& pop, const Gene* newGene);
 
 public:
 	// Protected Data Members:

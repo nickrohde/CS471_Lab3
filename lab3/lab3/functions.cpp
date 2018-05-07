@@ -332,9 +332,9 @@ inline double shekelsFoxholesFunction(const std::vector<double>* vect, const dou
 } // end method shekelsFoxholesFunction
 
 
-const std::vector<costFunction>& getAllCostFunctions(const double ** arg1, const std::size_t arg2)
+const std::vector<fitnessFunction>& getAllCostFunctions(const double ** arg1, const std::size_t arg2)
 {
-	static std::vector<costFunction> functions
+	static std::vector<fitnessFunction> functions
 	{
 		schwefelsFunction ,
 		firstDeJongsFunction ,

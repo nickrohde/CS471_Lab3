@@ -4,11 +4,14 @@
 #define _TEST_H
 #include <initializer_list> // variadic template
 #include "functions.hpp"    // cost functions
-#include "GA.hpp"
+#include "Containers.hpp"
+#include "results.hpp"
 
 #define SHEKEL_OUTER_SIZE 30 // size of outer array used by shekel's foxholes
 #define SHEKEL_INNER_SIZE 10 // size of inner array used by shekel's foxholes
 #define NUMBER_FUNCTIONS  15 // number of cost function
+
+typedef std::function<double(const std::vector<double>*)> fitnessFunction;
 
 /// <summary>Class that handles testing of the optimization strategies.</summary>
 class Test

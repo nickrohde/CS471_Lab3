@@ -45,22 +45,3 @@ GA_Population & operator<<(GA_Population & pop, const Offspring * newGenes)
 
 	return pop;
 } // end operator<<(Population&, const Offspring *)
-
-
-GA_Population & operator<<(GA_Population & pop, const Gene * newGene)
-{
-	pop.b_isSorted = false;
-
-	if (pop.genes.size() > 0)
-	{
-		if (newGene->length() != pop.genes.at(0).length())
-		{
-			throw invalid_argument("New genes are not of the same size as genes in population.");
-		} // end if
-	} // end if
-
-	pop.genes.push_back(*newGene);
-	pop.ui_size++;
-
-	return pop;
-} // end operator<<(Population &, const Gene *)

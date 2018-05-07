@@ -129,16 +129,4 @@ struct Population_Info
 	double		d_ELITISM_RATE;
 }; // end Struct Population Info
 
-
-struct DE_Info
-{
-	///<summary>Scaling factor F.</summary>
-	double	d_F,
-	///<summary>Scaling factor lambda.</summary>
-			d_lambda,
-	///<summary>Crossing-over rate.</summary>
-			d_CR;
-
-
-};
 #endif // !_CONTAINER_H

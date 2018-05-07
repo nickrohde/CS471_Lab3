@@ -9,10 +9,14 @@
 #include <algorithm>
 #include <chrono>
 #include <limits>
+#include <iterator>
 #pragma endregion
 
 
 #pragma region Defines
+///<summary>Math constants.</summary>
+#ifndef _MATH_CONSTANTS_
+#define _MATH_CONSTANTS_
 /// <summary>Pi</summary>
 #ifndef _PI
 #define _PI 3.141592653589793238462643383279
@@ -27,7 +31,7 @@
 #ifndef _ONE
 #define _ONE (1.0 + numeric_limits<double>::min())
 #endif // !_ONE
-
+#endif
 
 /// <summary>Return values.</summary>
 #ifndef EXIT_SUCCESS
@@ -39,6 +43,24 @@
 #ifndef NULL
 #define NULL 0
 #endif
+
+/// <summary>Checks whether n elements are unique using bitwise xor.</summary>
+#ifndef _UNIQUE_
+#define _UNIQUE_
+#define UNIQUE_3(a,b,c)         ((a^b) && (a^c) && (b^c))
+#define UNIQUE_4(a,b,c,d)       (UNIQUE_3(a,b,c) && (a^d) && (b^d) && (c^d))
+#define UNIQUE_5(a,b,c,d,e)     (UNIQUE_4(a,b,c,d) && (a^e) && (b^e) && (c^e) && (d^e))
+#define UNIQUE_6(a,b,c,d,e,f)   (UNIQUE_5(a,b,c,d,e) && (a^f) && (b^f) && (c^f) && (d^f) && (e^f))
+#define UNIQUE_7(a,b,c,d,e,f,g) (UNIQUE_6(a,b,c,d,e,f) && (a^g) && (b^g) && (c^g) && (d^g) && (e^g) && (f^g))
+#endif
+
+#ifndef _QS_DEFS_
+#define _QS_DEFS_
+#define SWITCH_TO_IS 16 // list size at which we swap to IS
+#define SWITCH_TO_HS 50 // recursion depth at which we swap to HS
+#endif
+
+
 #pragma endregion
 
 
@@ -81,6 +103,44 @@ inline T getRandomIntInRange(const T MIN, const T MAX)
 
 	return dist(engine);
 } // end template getRandomNumberInRange
+
+
+/// <summary>Generates a random permutation of <paramref name="numbers"/> of length <paramref name="M"/> and stores this in <paramref name="results"/>.</summary>
+/// <typeparam name="T">The type of <paramref name="numbers"/> and <paramref name="results"/>.</typeparam>
+/// <param name="numbers">The list of things to generate a permutation from.</param>
+/// <param name="N">The length of <paramref name="numbers"/>.</param>
+/// <param name="results">The list to store the permutation in.</param>
+/// <param name="M">The length of the permutation to generate.</param>
+/// <param name="excluded">A value that should not be included in the permutation.</param>
+/// <remarks>The order of <paramref name="numbers"/> will be changed by this function.</remarks>
+template <typename T>
+void genPermutation(T* numbers, std::size_t N, T* results, const std::size_t M, const T excluded)
+{
+	static std::random_device rd{};
+	static std::mt19937 engine{ rd() };
+
+	#pragma omp critical
+	{
+		// randomly shuffle the array elements around
+		for (size_t i = 0; i < M+1; i++) 
+		{
+			size_t j = getRandomIntInRange<size_t>(i, N-1);
+			auto temp = numbers[i]; 
+			numbers[i] = numbers[j];
+			numbers[j] = temp;
+		} // end for
+		// get the permutation from the first n indeces
+		for (size_t i = 0, j = 0; i < N; i++)
+		{
+			if (numbers[i] != excluded)
+			{
+				results[j] = numbers[i];
+				j++;
+			} // end if
+		} // end for
+
+	} // end critical section
+} // end template genPermutation
 
 
 /// <summary>Gets a vector of specified size with random values.</summary>
@@ -289,13 +349,13 @@ void vector_quickSort(Iter left, Iter right)
 	{
 		return;
 	} // end if
-	if (size <= 32)
+	if (size <= SWITCH_TO_IS)
 	{
 		vector_insertionSort(left, right); // swap to IS once partition is small
 		return;
 	} // end if
 
-	auto pivot = right - 1; // use last element as pivot to make partitioning easier
+	auto pivot = right - 1; // use last element as pivot as vector will usually be almost sorted except last part
 
 	auto partition = left; // partitioning point
 	auto curr = left; // iterator

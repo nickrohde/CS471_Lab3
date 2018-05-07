@@ -8,7 +8,7 @@
 
 
 /// <summary>Typedef to make cost function type a bit more readable.</summary>
-typedef std::function<double(const std::vector<double>*)> costFunction;
+typedef std::function<double(const std::vector<double>*)> fitnessFunction;
 
 /// <summary>Index of shekel's foxholes function in the vector returned by getAllCostFunctions</summary>
 const int i_SHEKEL_INDEX = 14;
@@ -94,7 +94,7 @@ inline double shekelsFoxholesFunction(const std::vector<double>* vect, const dou
 /// <param name="da_A">A matrix for the outer loop of shekel's foxholes function.</param>
 /// <param name="ui_M">The number of times to execute the outer loop of shekel's foxholes function is to be run.</param>
 /// <returns>A constant vector containing pointers to all 15 functions above.</returns>
-const std::vector<costFunction>& getAllCostFunctions(const double ** arg1, const std::size_t arg2);
+const std::vector<fitnessFunction>& getAllCostFunctions(const double ** arg1, const std::size_t arg2);
 
 
 #endif

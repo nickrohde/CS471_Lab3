@@ -2,18 +2,26 @@
 #include <sstream>
 #include "Test.hpp"
 #include <omp.h>
+#include "GA.hpp"
+#include "DE_Strategies.hpp"
 
 
 #define X_OVER_POINTS 4
 #define X_OVER_RATE 0.75
+
 #define MUT_RATE 0.15
 #define MUT_RANGE 25.0
 #define MUT_PREC 0.89
+
+#define POP_SIZE 100
+#define NUM_GEN 100
+#define ER 0.2
 
 #define NUM_THREADS 16
 
 using namespace std;
 
+/*
 void Test::runTest(void)
 {
 	Mutation_Info MUT_INFO(MUT_RATE, MUT_RANGE, MUT_PREC);
@@ -48,9 +56,12 @@ void Test::runTest(void)
 			{
 				res = geneticAlgorithm(fitnessFunctions[i], POP_INFO, da_ranges[i], MUT_INFO, CR_INFO);
 			
-				file << res->d_bestValue << ",";
+				file << res->d_bestValue;
 
-				avg_time += res->d_avgTime;
+				if (k < 99)
+				{
+					file << ",";
+				}
 
 				delete res;
 			}
@@ -67,7 +78,77 @@ void Test::runTest(void)
 	duration compute_time = std::chrono::duration_cast<duration>(end - start);
 	cout << "Overall time of test: " << compute_time.count() << endl;
 }
+/*/
 
+void Test::runTest(void)
+{
+	Mutation_Info MUT_INFO(MUT_RATE, MUT_RANGE, MUT_PREC);
+	Crossing_Over_Info CR_INFO(X_OVER_POINTS, X_OVER_RATE);
+
+	size_t max_dim = 30;
+
+	timePoint end = highRes_Clock::now();
+	timePoint start = highRes_Clock::now();
+
+	results_t* res;
+	Population_Info POP_INFO;
+	double avg_time = 0.0;
+
+	size_t* numbers = new size_t[POP_SIZE];
+
+	for (size_t i = 0; i < POP_SIZE; i++)
+	{
+		numbers[i] = i;
+	}
+
+	for (size_t i = 0; i < 15; i++)
+	{
+		if (i == 14)
+		{
+			max_dim = 10;
+		}
+
+		ofstream file(makeFileName(10, i), ios::app | ios::out);
+
+		for (int j = 10; j <= max_dim; j += 10)
+		{
+			POP_INFO = Population_Info(POP_SIZE, j, NUM_GEN, ER);
+
+			avg_time = 0.0;
+
+			for (size_t k = 0; k < 100; k++)
+			{
+				res = DifferentialEvolution::differentialEvolution(fitnessFunctions[i], POP_INFO, da_ranges[i], CR_INFO, DE_Strategy::DE_RAND_1_BIN, numbers);
+
+				file << res->d_bestValue;
+
+				if (k < 99)
+				{
+					file << ",";
+				}
+				std::cout << res->d_bestValue << ", ";
+				
+
+				avg_time += res->d_avgTime;
+
+				delete res;
+			}
+
+			std::cout << "Average time for f_" << (i + 1) << " in " << j << " dimensions: " << (avg_time / 100.0) << endl;
+		}
+
+		file.close();
+	}
+
+	end = highRes_Clock::now();
+
+	delete[] numbers;
+
+	duration compute_time = std::chrono::duration_cast<duration>(end - start);
+	cout << "Overall time of test: " << compute_time.count() << endl;
+}
+
+//*/
 
 Test::Test(void)
 {
@@ -226,7 +307,7 @@ string Test::makeFileName(size_t ui_dim, int i_functionNumber)
 {
 	stringstream name;
 
-	name << "data_" << ui_dim << "_f" << (i_functionNumber + 1) << ".csv" ;
+	name << "DE1_" << ui_dim << "_f" << (i_functionNumber + 1) << ".csv" ;
 
 	return name.str();
 }

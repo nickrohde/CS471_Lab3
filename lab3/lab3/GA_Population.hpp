@@ -63,11 +63,11 @@ public:
 	/// <exception name="std::invalid_argument">Thrown if any gene in <paramref name="newGenes"/> is not the same length as all other genes in this population.</exception>
 	friend GA_Population& operator<<(GA_Population& pop, const Offspring* newGenes);
 
-	/// <summary>Adds the gene <paramref name="newGene"/> to this population.</summary>
-	/// <param name="newGene">The new gene that will be added to this population.</param>
-	/// <remarks>The gene to be added must be compatible, i.e. of the same length as the genes already in this population.</remarks>
-	/// <exception name="std::invalid_argument">Thrown if <paramref name="newGene"/> is not the same length as all other genes in this population.</exception>
-	friend GA_Population& operator<<(GA_Population& pop, const Gene* newGene);
+	// <summary>Adds the gene <paramref name="newGene"/> to this population.</summary>
+	// <param name="newGene">The new gene that will be added to this population.</param>
+	// <remarks>The gene to be added must be compatible, i.e. of the same length as the genes already in this population.</remarks>
+	// <exception name="std::invalid_argument">Thrown if <paramref name="newGene"/> is not the same length as all other genes in this population.</exception>
+	//friend GA_Population& operator<<(GA_Population& pop, const Gene* newGene);
 
 private:
 	// Private Data Members:
