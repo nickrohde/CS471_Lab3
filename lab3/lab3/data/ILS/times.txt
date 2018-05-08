@@ -1,82 +1,15 @@
-30 Iterations:
-f_1 in 10 dimensions: 0.2307
-f_1 in 20 dimensions: 1.88618
-f_1 in 30 dimensions: 6.32335
-
-f_2 in 10 dimensions: 0.0610688
-f_2 in 20 dimensions: 0.356416
-f_2 in 30 dimensions: 1.4998
-
-f_3 in 10 dimensions: 0.0220306
-f_3 in 20 dimensions: 0.138169
-f_3 in 30 dimensions: 0.38987
-
-f_4 in 10 dimensions: 0.000232794
-f_4 in 20 dimensions: 0.0204883
-f_4 in 30 dimensions: 0.0703533
-
-f_5 in 10 dimensions: 0.772874
-f_5 in 20 dimensions: 9.10991
-f_5 in 30 dimensions: 31.9801
-
-f_6 in 10 dimensions: 0.00153632
-f_6 in 20 dimensions: 0.00726257
-f_6 in 30 dimensions: 0.0230013
-
-f_7 in 10 dimensions: 0.026808
-f_7 in 20 dimensions: 0.2435
-f_7 in 30 dimensions: 0.801876
-
-f_8 in 10 dimensions: 0.00673015
-f_8 in 20 dimensions: 0.0512073
-f_8 in 30 dimensions: 0.14984
-
-f_9 in 10 dimensions: 0.0039356
-f_9 in 20 dimensions: 0.0417926
-f_9 in 30 dimensions: 0.101992
-
-f_10 in 10 dimensions: 0.483812
-f_10 in 20 dimensions: 4.35773
-f_10 in 30 dimensions: 14.9107
-
-f_11 in 10 dimensions: 0.00805283
-f_11 in 20 dimensions: 0.0652319
-f_11 in 30 dimensions: 0.263908
-
-f_12 in 10 dimensions: 0.00426724
-f_12 in 20 dimensions: 0.0321925
-f_12 in 30 dimensions: 0.0950036
-
-f_13 in 10 dimensions: 0.00372076
-f_13 in 20 dimensions: 0.0251879
-f_13 in 30 dimensions: 0.0841233
-
-f_14 in 10 dimensions: 0.000963913
-f_14 in 20 dimensions: 0.00373838
-f_14 in 30 dimensions: 0.00908667
-
-f_15 in 10 dimensions: 0.00328827
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+0.2307,1.88618,6.32335
+0.0610688,0.356416,1.4998
+0.0220306,0.138169,0.38987
+0.000232794,0.0204883,0.0703533
+0.772874,9.10991,31.9801
+0.00153632,0.00726257,0.0230013
+0.026808,0.2435,0.801876
+0.00673015,0.0512073,0.14984
+0.0039356,0.0417926,0.101992
+0.483812,4.35773,14.9107
+0.00805283,0.0652319,0.263908
+0.00426724,0.0321925,0.0950036
+0.00372076,0.0251879,0.0841233
+0.000963913,0.00373838,0.00908667
+0.00328827,0,0
