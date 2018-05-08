@@ -22,7 +22,7 @@ public:
 	{
 		ui_length = 0;
 		d_fitness = std::numeric_limits<double>::max();
-	}
+	} // end default Constructor
 
 	/// <summary>Constructs a new randomly generated gene.</summary>
 	/// <param name="ui_SIZE">The length of the gene.</param>
@@ -38,7 +38,7 @@ public:
 	~Gene(void) 
 	{
 		gene.clear();
-	}
+	} // end Destructor
 
 	// Operations:
 	/// <summary>Creates a random mutation in this gene.</summary>

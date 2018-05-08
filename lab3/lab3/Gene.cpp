@@ -45,7 +45,8 @@ Gene::Gene(const Gene& other)
 	for (auto& d : other.gene)
 	{
 		gene.push_back(d);
-	}
+	} // end foreach
+
 	d_fitness = other.d_fitness;
 } // end Copy Constructor
 
@@ -62,6 +63,16 @@ void Gene::mutate(const Mutation_Info& MUT_INFO, const Bounds& BOUNDS)
 			// randomly pick the sign of the mutation
 			val += (getRandomIntInRange<int>(0, 1) % 2) ? (temp * -1) : (temp);
 		} // end if
+
+		// ensure this mutation did not go out of bounds
+		while (val > BOUNDS.d_max)
+		{
+			val = (val - BOUNDS.d_max);
+		} // end while
+		while (val < BOUNDS.d_min)
+		{
+			val = (val - (BOUNDS.d_min - 0.1));
+		} // end while
 	} // end foreach
 } // end method mutate
 
@@ -117,8 +128,8 @@ void Gene::recombine(const Gene & PARENT_A, const Gene & PARENT_B, const std::ve
 		for (size_t k = start; k < end; k++)
 		{
 			gene.push_back(temp->gene.at(k));
-		} // end for
-	} // end for
+		} // end for k
+	} // end for j
 
 	delete distribution;
 } // end method recombine

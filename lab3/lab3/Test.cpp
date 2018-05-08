@@ -30,11 +30,18 @@ void Test::runTest(void)
 	size_t max_dim = 30;
 
 	timePoint end = highRes_Clock::now();
-	timePoint start = highRes_Clock::now();
 
 	results_t* res;
 	Population_Info POP_INFO;
-	double avg_time = 0.0;
+
+	double* avg_time = new double[3];
+
+	double** data = new double*[3];
+	data[0] = new double[100];
+	data[1] = new double[100];
+	data[2] = new double[100];
+
+	timePoint start = highRes_Clock::now();
 
 	for (size_t i = 0; i < 15; i++)
 	{
@@ -43,31 +50,58 @@ void Test::runTest(void)
 			max_dim = 10;
 		}
 
-	#pragma omp parallel for private(res, POP_INFO) reduction(+ : avg_time) num_threads(NUM_THREADS)
-		for (int j = 10; j <= max_dim; j += 10)
+		avg_time[0] = 0.0;
+		avg_time[1] = 0.0;
+		avg_time[2] = 0.0;
+
+		int j = 10;
+
+		#pragma omp parallel for private(res, POP_INFO, j) num_threads(NUM_THREADS)
+		for (j = 10; j <= max_dim; j += 10)
 		{
-			POP_INFO = Population_Info(100, j, 100, 0.2);
-
-			ofstream file(makeFileName(j,i), ios::app | ios::out);
-
-			avg_time = 0.0;
+			POP_INFO = Population_Info(POP_SIZE, j, NUM_GEN, ER);
 
 			for (size_t k = 0; k < 100; k++)
 			{
 				res = geneticAlgorithm(fitnessFunctions[i], POP_INFO, da_ranges[i], MUT_INFO, CR_INFO);
 			
-				file << res->d_bestValue;
-
-				if (k < 99)
+				#pragma omp critical
 				{
-					file << ",";
+					data[(j / 10) - 1][k] = res->d_bestValue;
+					avg_time[(j / 10) - 1] += res->d_avgTime;
 				}
 
 				delete res;
 			}
-			#pragma omp critical
+		} // end for j
+
+		for (size_t k = 0; k < 3; k++)
+		{
+			ofstream file2("times.txt", ios::app | ios::out);
+
+			file2 << (avg_time[k] / 100);
+
+			if (k < 2)
 			{
-				cout << "Average time for f_" << (i + 1) << " in " << j << " dimensions: " << (avg_time / 100.0) << endl;
+				file2 << ", ";
+			}
+			else
+			{
+				file2 << "\n";
+			}
+
+			file2.close();
+
+			ofstream file(makeFileName(10 * (k + 1), i), ios::app | ios::out);
+
+			for (size_t j = 0; j < 100; j++)
+			{
+				file << data[k][j];
+
+				if (j < 99)
+				{
+					file << ",";
+				}
 			}
 			file.close();
 		}
@@ -75,8 +109,15 @@ void Test::runTest(void)
 
 	end = highRes_Clock::now();
 
+	delete[] data[0];
+	delete[] data[1];
+	delete[] data[2];
+	delete[] data;
+
+
+
 	duration compute_time = std::chrono::duration_cast<duration>(end - start);
-	cout << "Overall time of test: " << compute_time.count() << endl;
+	std::cout << "Overall time of test: " << compute_time.count() << endl;
 }
 /*/
 
@@ -88,7 +129,7 @@ void Test::runTest(void)
 	size_t max_dim = 30;
 
 	timePoint end = highRes_Clock::now();
-	timePoint start = highRes_Clock::now();
+
 
 	results_t* res;
 	Population_Info POP_INFO;
@@ -102,7 +143,7 @@ void Test::runTest(void)
 	data[1] = new double[100];
 	data[2] = new double[100];
 
-
+	timePoint start = highRes_Clock::now();
 	for (size_t i = 0; i < 15; i++)
 	{
 		if (i == 14)
@@ -129,12 +170,11 @@ void Test::runTest(void)
 
 			for (size_t k = 0; k < 100; k++)
 			{
-				res = DifferentialEvolution::differentialEvolution(fitnessFunctions[i], POP_INFO, da_ranges[i], CR_INFO, DE_Strategy::DE_BEST_1_EXP, numbers);
-
-				data[(j/10)-1][i] = res->d_bestValue;
+				res = DifferentialEvolution::differentialEvolution(fitnessFunctions[i], POP_INFO, da_ranges[i], CR_INFO, DE_Strategy::DE_BEST_2_BIN, numbers);
 
 				#pragma omp critical
 				{
+					data[(j / 10) - 1][k] = res->d_bestValue;
 					avg_time[(j/10)-1] += res->d_avgTime;
 				}
 
@@ -143,6 +183,7 @@ void Test::runTest(void)
 
 			delete[] numbers;
 		} // end for j
+
 
 		for(size_t k = 0; k < 3; k++)
 		{
@@ -165,7 +206,7 @@ void Test::runTest(void)
 
 			for (size_t j = 0; j < 100; j++)
 			{
-				file << data[k][i];
+				file << data[k][j];
 
 				if (j < 99)
 				{
@@ -176,13 +217,13 @@ void Test::runTest(void)
 		}
 	}
 
+	end = highRes_Clock::now();
+
 	delete[] data[0];
 	delete[] data[1];
 	delete[] data[2];
 	delete[] data;
-
-	end = highRes_Clock::now();
-
+	
 
 	duration compute_time = std::chrono::duration_cast<duration>(end - start);
 	std::cout << "Overall time of test: " << compute_time.count() << endl;
@@ -347,7 +388,7 @@ string Test::makeFileName(size_t ui_dim, int i_functionNumber)
 {
 	stringstream name;
 
-	name << "DE1_" << ui_dim << "_f" << (i_functionNumber + 1) << ".csv" ;
+	name << "DE3_" << ui_dim << "_f" << (i_functionNumber + 1) << ".csv" ;
 
 	return name.str();
 }
