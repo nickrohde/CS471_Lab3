@@ -1,19 +1,15 @@
-Average time for f_9 in 20 dimensions: 0.126665
-Average time for f_9 in 30 dimensions: 0.166409
-Average time for f_10 in 10 dimensions: 0.208752
-Average time for f_10 in 20 dimensions: 0.301443
-Average time for f_10 in 30 dimensions: 0.358154
-Average time for f_11 in 10 dimensions: 0.209185
-Average time for f_11 in 20 dimensions: 0.291024
-Average time for f_11 in 30 dimensions: 0.343237
-Average time for f_12 in 10 dimensions: 0.212904
-Average time for f_12 in 20 dimensions: 0.294894
-Average time for f_12 in 30 dimensions: 0.332387
-Average time for f_13 in 10 dimensions: 0.13144
-Average time for f_13 in 20 dimensions: 0.239428
-Average time for f_13 in 30 dimensions: 0.302924
-Average time for f_14 in 10 dimensions: 0.167365
-Average time for f_14 in 20 dimensions: 0.26697
-Average time for f_14 in 30 dimensions: 0.323076
-Average time for f_15 in 10 dimensions: 0.0681037
-Overall time of test: 347.664
+0.108398, 0.22364, 0.306307
+0.0845481, 0.115263, 0.145001
+0.0881687, 0.116146, 0.146959
+0.130175, 0.148529, 0.164447
+0.125461, 0.118595, 0.151172
+0.174019, 0.230544, 0.293071
+0.104599, 0.159992, 0.227735
+0.116842, 0.154906, 0.192765
+0.0882028, 0.131787, 0.170903
+0.209956, 0.288777, 0.366887
+0.207304, 0.280352, 0.350379
+0.205106, 0.273415, 0.343661
+0.134093, 0.247634, 0.335929
+0.161342, 0.257272, 0.332654
+0.0719419, 0, 0

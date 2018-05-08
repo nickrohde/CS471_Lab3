@@ -129,7 +129,7 @@ void Test::runTest(void)
 
 			for (size_t k = 0; k < 100; k++)
 			{
-				res = DifferentialEvolution::differentialEvolution(fitnessFunctions[i], POP_INFO, da_ranges[i], CR_INFO, DE_Strategy::DE_BEST_2_BIN, numbers);
+				res = DifferentialEvolution::differentialEvolution(fitnessFunctions[i], POP_INFO, da_ranges[i], CR_INFO, DE_Strategy::DE_BEST_1_EXP, numbers);
 
 				data[(j/10)-1][i] = res->d_bestValue;
 

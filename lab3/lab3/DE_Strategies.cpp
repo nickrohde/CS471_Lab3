@@ -312,8 +312,7 @@ void DifferentialEvolution::crossingOverBIN(Gene* parent, Gene* noise, const std
 
 	while (position < N)
 	{
-		// NOT (Random(0,1) < CR)
-		if (getRandomRealInRange<double>(0.0, _ONE) >= CR)
+		if (getRandomRealInRange<double>(0.0, _ONE) < CR)
 		{
 			noise->gene[j] = parent->gene[j];
 		} // end if
@@ -335,7 +334,7 @@ void DifferentialEvolution::crossingOverEXP(Gene* parent, Gene* noise, const std
 
 		j = ((j + 1) % N);
 		position++;
-	} while ((getRandomRealInRange<double>(0.0, _ONE) >= CR) && position < N);
+	} while ((getRandomRealInRange<double>(0.0, _ONE) < CR) && position < N);
 } // end method crossingOverEXP
 
 
