@@ -121,6 +121,7 @@ void Test::runTest(void)
 }
 /*/
 
+/*
 void Test::runTest(void)
 {
 	Mutation_Info MUT_INFO(MUT_RATE, MUT_RANGE, MUT_PREC);
@@ -229,8 +230,75 @@ void Test::runTest(void)
 	std::cout << "Overall time of test: " << compute_time.count() << endl;
 }
 
-//*/
+/*/
 
+void Test::runTest(void)
+{
+	Mutation_Info MUT_INFO(MUT_RATE, MUT_RANGE, MUT_PREC);
+
+	results_t* res;
+	Population_Info POP_INFO(POP_SIZE,10,40,ER);
+
+
+	timePoint start = highRes_Clock::now();
+	timePoint end = highRes_Clock::now();
+
+	double best[10][15];
+	double avg_time[10][15];
+
+	for (int j = 1; j < 10; j++)
+	{
+		Crossing_Over_Info CR_INFO(j, X_OVER_RATE);
+		for (int i = 0; i < 15; i++)
+		{
+			avg_time[j][i] = 0.0;
+			for (size_t k = 0; k < 30; k++)
+			{
+				start = highRes_Clock::now();
+				results_t* res = geneticAlgorithm(fitnessFunctions[i], POP_INFO, da_ranges[i], MUT_INFO, CR_INFO);
+				end = highRes_Clock::now();
+
+				duration compute_time = std::chrono::duration_cast<duration>(end - start);
+
+				avg_time[j][i] += compute_time.count();
+
+				if (res->d_bestValue < best[j][i])
+				{
+					best[j][i] = res->d_bestValue;
+				}
+
+				delete res;
+			}
+		}
+	}
+
+	double overall_best = 100000000.0;
+	int best_index = 0, f_index = 0;
+
+	for (int i = 1; i < 10; i++)
+	{
+		cout << "Results for " << i << "cross-over points:" << endl;
+		for (int j = 0; j < 15; j++)
+		{
+			cout << "\tf_" << j << " execution time: " << avg_time[i][j] << endl;
+			cout << "\t\tbest value: " << best[i][j] << endl;
+
+			if (best[i][j] < overall_best) 
+			{
+				overall_best = best[i][j];
+				best_index = i;
+				f_index = j;
+			}
+		}
+	}
+
+	cout << "Overall best produced by " << best_index << " cross-over points, resulted in " << overall_best << " for function " << f_index << endl;
+
+	
+
+}
+
+//*/
 Test::Test(void)
 {
 	da_ranges = new Bounds[NUMBER_FUNCTIONS]; // array containing the bounds of each function
