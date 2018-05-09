@@ -2,7 +2,7 @@
 #include <iostream>
 #include <exception>
 
-#define DEBUG 1
+#define DEBUG 0
 
 using namespace std;
 

@@ -5,18 +5,6 @@
 #include "GA.hpp"
 #include "DE_Strategies.hpp"
 
-
-#define X_OVER_POINTS 4
-#define X_OVER_RATE 0.75
-
-#define MUT_RATE 0.15
-#define MUT_RANGE 25.0
-#define MUT_PREC 0.89
-
-#define POP_SIZE 100
-#define NUM_GEN 100
-#define ER 0.2
-
 #define NUM_THREADS 16
 
 using namespace std;
@@ -232,6 +220,7 @@ void Test::runTest(void)
 
 /*/
 
+/*
 void Test::runTest(void)
 {
 	Mutation_Info MUT_INFO(MUT_RATE, MUT_RANGE, MUT_PREC);
@@ -298,7 +287,9 @@ void Test::runTest(void)
 
 }
 
-//*/
+*/
+
+
 Test::Test(void)
 {
 	da_ranges = new Bounds[NUMBER_FUNCTIONS]; // array containing the bounds of each function
@@ -319,12 +310,284 @@ Test::Test(void)
 } // end Default Constructor
 
 
-Test::Test(vector<double>* lsd, size_t ui_dimMin, size_t ui_dimMax, size_t ui_dimDelta, bool b_storeRes)
+void Test::RunDE(size_t ui_iterations, double CR, size_t strat)
+{
+	// the hard-coded values are unused
+	// setup population structs
+	Crossing_Over_Info CR_INFO(6, CR);
+	Population_Info POP_INFO;
+
+	// used for permutation generation
+	size_t* numbers;
+
+	// max dimension to run for
+	size_t max = 30;
+
+	// storage for results
+	results_t* res;
+	double* avg_time = new double[3];
+	double** data = new double*[3];
+
+	if (b_storeData)
+	{
+		data[0] = new double[100];
+		data[1] = new double[100];
+		data[2] = new double[100];
+	} // end if
+
+	DE_Strategy t;
+
+	switch (strat)
+	{
+	case 1:
+		t = DE_Strategy::DE_BEST_1_EXP;
+		break;
+	case 2:
+		t = DE_Strategy::DE_RAND_1_EXP;
+		break;
+	case 3:
+		t = DE_Strategy::DE_RTB_1_EXP;
+		break;
+	case 4:
+		t = DE_Strategy::DE_BEST_2_EXP;
+		break;
+	case 5:
+		t = DE_Strategy::DE_RAND_2_EXP;
+		break;
+	case 6:
+		t = DE_Strategy::DE_BEST_1_BIN;
+		break;
+	case 7:
+		t = DE_Strategy::DE_RAND_1_BIN;
+		break;
+	case 8:
+		t = DE_Strategy::DE_RTB_1_BIN;
+		break;
+	case 9:
+		t = DE_Strategy::DE_BEST_2_BIN;
+		break;
+	case 10:
+		t = DE_Strategy::DE_RAND_2_BIN;
+		break;
+	default:
+		exit(EXIT_FAILURE);
+	}
+
+	// timing
+	timePoint end = highRes_Clock::now();
+	timePoint start = highRes_Clock::now();
+
+	for (size_t i = 0; i < fitnessFunctions.size(); i++)
+	{
+		if (i == 14)
+		{
+			max = 10;
+		} // end if
+
+		// reset average times
+		avg_time[0] = 0.0;
+		avg_time[1] = 0.0;
+		avg_time[2] = 0.0;		
+		
+		for (int j = 10; j <= max; j += 10)
+		{
+			POP_INFO = Population_Info((10*j), j, ui_generations, 0.2);
+
+			numbers = new size_t[(10*j)]; // initialize valid indeces list
+
+			for (size_t z = 0; z < (10 * j); z++)
+			{
+				numbers[z] = z;
+			} // end for
+
+			// run tests for current function and dimension
+			for (size_t k = 0; k < ui_iterations; k++)
+			{
+				res = DifferentialEvolution::differentialEvolution(fitnessFunctions[i], POP_INFO, da_ranges[i], CR_INFO, t, numbers);
+
+				if (b_storeData)
+				{
+					data[(j / 10) - 1][k] = res->d_bestValue;
+					avg_time[(j / 10) - 1] += res->d_avgTime;
+				} // end critical
+
+				delete res;
+			} // end for k
+
+			delete[] numbers;
+		} // end for j
+
+
+		if (b_storeData)
+		{
+			for (size_t k = 0; k < 3; k++)
+			{
+				ofstream file2("times.txt", ios::app | ios::out);
+
+				if (file2.bad() || !file2.is_open())
+				{
+					cout << "Could not save results!" << endl;
+					file2.close();
+					break;
+				}// end if
+
+				file2 << (avg_time[k] / 100);
+
+				if (k < 2)
+				{
+					file2 << ", ";
+				}
+				else
+				{
+					file2 << "\n";
+				}
+
+				file2.close();
+
+				ofstream file(makeFileName(10 * (k + 1), i), ios::app | ios::out);
+
+				for (size_t j = 0; j < 100; j++)
+				{
+					file << data[k][j];
+
+					if (j < 99)
+					{
+						file << ",";
+					} // end if
+				} // end for
+				file.close();
+			} // end for k
+		} // end if
+	} // end fori
+
+	end = highRes_Clock::now();
+
+	if (b_storeData)
+	{
+		delete[] data[0];
+		delete[] data[1];
+		delete[] data[2];
+	} // end if
+
+	delete[] data;
+
+	duration compute_time = std::chrono::duration_cast<duration>(end - start);
+	std::cout << "Overall time of test: " << compute_time.count() << std::endl;
+	
+
+} // end method runDE
+
+
+void Test::RunGA(size_t ui_iterations, double MR, double MRg, double MP, size_t CP, double CR, double ER)
+{
+	Mutation_Info MUT_INFO(MR, MRg, MP);
+	Crossing_Over_Info CR_INFO(CP, CR);
+	Population_Info POP_INFO;
+
+	size_t max_dim = 30;
+
+	results_t* res;
+	double* avg_time = new double[3];
+	double** data = new double*[3];
+
+	if (b_storeData)
+	{
+		data[0] = new double[100];
+		data[1] = new double[100];
+		data[2] = new double[100];
+	} // end if
+
+	timePoint end = highRes_Clock::now();
+	timePoint start = highRes_Clock::now();
+
+	for (size_t i = 0; i < fitnessFunctions.size(); i++)
+	{
+		if (i == 14)
+		{
+			max_dim = 10;
+		} // end if
+
+		avg_time[0] = 0.0;
+		avg_time[1] = 0.0;
+		avg_time[2] = 0.0;
+
+		for (int j = 10; j <= max_dim; j += 10)
+		{
+			POP_INFO = Population_Info((10*j), j, ui_generations, ER);
+
+			for (size_t k = 0; k < ui_iterations; k++)
+			{
+				res = geneticAlgorithm(fitnessFunctions[i], POP_INFO, da_ranges[i], MUT_INFO, CR_INFO);
+
+				if(b_storeData)
+				{
+					data[(j / 10) - 1][k] = res->d_bestValue;
+					avg_time[(j / 10) - 1] += res->d_avgTime;
+				} // end critical
+
+				delete res;
+			} // end for k
+		} // end for j
+
+		if (b_storeData)
+		{
+			for (size_t k = 0; k < 3; k++)
+			{
+				ofstream file2("times.txt", ios::app | ios::out);
+
+				file2 << (avg_time[k] / 100);
+
+				if (k < 2)
+				{
+					file2 << ", ";
+				} // end if
+				else
+				{
+					file2 << "\n";
+				} // end else
+
+				file2.close();
+
+				ofstream file(makeFileName(10 * (k + 1), i), ios::app | ios::out);
+
+				for (size_t j = 0; j < 100; j++)
+				{
+					file << data[k][j];
+
+					if (j < 99)
+					{
+						file << ",";
+					} // end if
+				} // end for
+				file.close();
+			} // end for k
+		} // end if
+	} // end for i
+
+	end = highRes_Clock::now();
+
+	if (b_storeData)
+	{
+		delete[] data[0];
+		delete[] data[1];
+		delete[] data[2];
+	} // end if
+
+	delete[] data;
+
+	duration compute_time = std::chrono::duration_cast<duration>(end - start);
+	std::cout << "Overall time of test: " << compute_time.count() << endl;
+
+}
+
+
+Test::Test(size_t ui_dimMin, size_t ui_dimMax, size_t ui_dimDelta, bool b_storeRes, size_t ui_generations)
 {
 	ui_minDimensions = ui_dimMin;
 	ui_maxDimensions = ui_dimMax;
 	ui_dimensionDelta = ui_dimDelta;
 	b_storeData = b_storeRes;
+	this->ui_generations = ui_generations;
 
 	compute_start = compute_end = highRes_Clock::now();
 

@@ -61,11 +61,11 @@ public:
 private:
 	/// <summary>Parameters extracted from the .ini file.</summary>
 	size_t	ui_iterations,
-			ui_numILSItr,
-			ui_numFunctions,
+			ui_generations,
 			ui_startDim,
 			ui_endDim,
-			ui_dimDelta;
+			ui_dimDelta,
+			ui_strat;
 
 	/// <summary>Parameter extracted from the .ini file.</summary>
 	bool	b_storeData,
@@ -74,6 +74,16 @@ private:
 	/// <summary>Tells run that the user wants to quit after trying to enter a file name.</summary>
 			b_stop;	
 
+	/// <summary>Parameters extracted from the .ini file.</summary>
+	double  d_ER,
+			d_DE_CR,
+			d_DE_MR,
+			d_GA_CR,
+			d_GA_CP,
+			d_GA_MR,
+			d_GA_MRg,
+			d_GA_MP;
+
 	/// <summary>Timing of each run.</summary>
 	timePoint	compute_start,
 				compute_end;
@@ -81,9 +91,6 @@ private:
 
 	/// <summary>A test object, this pointer is managed by the run function.</summary>
 	Test* test;
-
-	/// <summary>Vector containing initial delta x values for local search.</summary>
-	std::vector<double> LS_deltaX;
 
 	/// <summary>Displays the main menu to the user.</summary>
 	void presentMenu(void);

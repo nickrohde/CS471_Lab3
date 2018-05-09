@@ -98,30 +98,20 @@ void Driver::initialize(const std::string  s_fileName)
 
 		ui_iterations = convertStringToType<size_t>((*parser)("TEST", "num_test_itrs"));
 		b_storeData = convertStringToType<bool>((*parser)("TEST", "store_data"));
-		ui_numFunctions = convertStringToType<size_t>((*parser)("FUNCTIONS", "total"));
-		ui_numILSItr = convertStringToType<size_t>((*parser)("FUNCTIONS", "num_ILS_itrs"));
-	
-		if (ui_numFunctions <= 0 || ui_iterations <= 0)
-		{
-			delete parser;
-			throw invalid_argument("Number of functions and number of iterations must be positive integer!");
-		} // end if
 
-		for (size_t i = 1; i <= ui_numFunctions; i++)
-		{
-			stringstream ss;
-			ss << "f" << i;
+		ui_generations = convertStringToType<size_t>((*parser)("POP", "generations"));
+		d_ER = convertStringToType<double>((*parser)("POP", "er"));
 
-			double temp = convertStringToType<double>((*parser)("LS_DELTA", ss.str()));
+		d_DE_CR = convertStringToType<double>((*parser)("DE", "cr"));
+		d_DE_MR = convertStringToType<double>((*parser)("DE", "mr"));
+		ui_strat = convertStringToType<size_t>((*parser)("DE", "strategy"));
 
-			if (temp == 0.0)
-			{
-				delete parser;
-				throw invalid_argument("Delta values for local search must be non-zero floats!");
-			} // end if
-
-			LS_deltaX.push_back(temp);
-		} // end for
+		d_GA_CR = convertStringToType<double>((*parser)("GA", "cr"));
+		d_GA_CP = convertStringToType<double>((*parser)("GA", "cp"));
+		d_GA_MR = convertStringToType<double>((*parser)("GA", "mr"));
+		d_GA_MRg = convertStringToType<double>((*parser)("GA", "mrg"));
+		d_GA_MP = convertStringToType<double>((*parser)("GA", "mp"));
+		
 	} // end try
 	catch (invalid_argument e)
 	{
@@ -241,69 +231,61 @@ Driver::Driver(string s_fileName) : Driver()
 
 int Driver::run(void)
 {
-	if (!_DEBUG)
+	char choice = 'q';
+
+	if (b_invalid)
 	{
-		char choice = 'q';
+		cout << "Parsing of the .ini file failed. Exiting ..." << endl;
+		return EXIT_FAILURE; // ini file parsing was unsuccessful
+	} // end if
 
-		if (b_invalid)
-		{
-			cout << "Parsing of the .ini file failed. Exiting ..." << endl;
-			return EXIT_FAILURE; // ini file parsing was unsuccessful
-		} // end if
+	test = new Test(ui_startDim, ui_endDim, ui_dimDelta, b_storeData, ui_generations);
 
-		test = new Test(&LS_deltaX, ui_startDim, ui_endDim, ui_dimDelta, b_storeData);
-
-		do
-		{
-			clearInput();
-			choice = getChoice(); // get user input for which algorithm to run
-
-			switch (choice)
-			{
-			case '1':
-			{
-				cout << "Starting tests for Genetic Algorithm ..." << endl;
-
-				compute_start = highRes_Clock::now(); // start timer for whole run
-
-
-
-				compute_end = highRes_Clock::now();
-				time_to_compute = std::chrono::duration_cast<duration>(compute_end - compute_start);
-
-				cout << "Finished running tests for Genetic Algorithm." << endl;
-				cout << "Time elapsed: " << time_to_compute.count() << " seconds." << endl << endl;
-
-				break;
-			} // end case 1
-
-			case '2':
-			{
-				cout << "Starting tests for Differential Evolution ..." << endl;
-
-				compute_start = highRes_Clock::now(); // start timer for whole run
-
-
-
-				compute_end = highRes_Clock::now();
-				time_to_compute = std::chrono::duration_cast<duration>(compute_end - compute_start);
-
-				cout << "Finished running tests for Differential Evolution." << endl;
-				cout << "Time elapsed: " << time_to_compute.count() << " seconds." << endl << endl;
-
-				break;
-			} // end case 2
-
-			default:
-				break;
-			} // end switch
-		} while (tolower(choice) != 'q');
-	}
-	else
+	do
 	{
-		test = new Test();
-		test->runTest();
-	}
+		clearInput();
+		choice = getChoice(); // get user input for which algorithm to run
+
+		switch (choice)
+		{
+		case '1':
+		{
+			cout << "Starting tests for Genetic Algorithm ..." << endl;
+
+			compute_start = highRes_Clock::now(); // start timer for whole run
+
+			test->RunGA(ui_iterations,d_GA_MR,d_GA_MRg,d_GA_MP,d_GA_CP,d_GA_CR,d_ER);
+
+			compute_end = highRes_Clock::now();
+			time_to_compute = std::chrono::duration_cast<duration>(compute_end - compute_start);
+
+			cout << "Finished running tests for Genetic Algorithm." << endl;
+			cout << "Time elapsed: " << time_to_compute.count() << " seconds." << endl << endl;
+
+			break;
+		} // end case 1
+
+		case '2':
+		{
+			cout << "Starting tests for Differential Evolution ..." << endl;
+
+			compute_start = highRes_Clock::now(); // start timer for whole run
+
+			test->RunDE(ui_iterations,d_DE_CR,ui_strat);
+
+			compute_end = highRes_Clock::now();
+			time_to_compute = std::chrono::duration_cast<duration>(compute_end - compute_start);
+
+			cout << "Finished running tests for Differential Evolution." << endl;
+			cout << "Time elapsed: " << time_to_compute.count() << " seconds." << endl << endl;
+
+			break;
+		} // end case 2
+
+		default:
+			break;
+		} // end switch
+	} while (tolower(choice) != 'q');
 
 	delete test;
 

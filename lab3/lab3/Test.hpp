@@ -20,99 +20,32 @@ public:
 	/// <summary>Default constructor, sets all variables to a default.</summary>
 	Test(void);
 
-	/// <summary>Constructor taking 5 arguements.</summary>
-	/// <param name="lsd">Pointer to a vector containing the delta values for local search.</param>
+	/// <summary>Constructor taking 4 arguements.</summary>
 	/// <param name="ui_dimMin">Starting dimension for tests (inclusive; must be positive integer and strictly smaller than <paramref name="ui_dimMax"/>).</param>
 	/// <param name="ui_dimMax">Ending dimension for tests (inclusive; must be positive integer and strictly greater than <paramref name="ui_dimMin"/>).</param>
 	/// <param name="ui_dimDelta">Dimension increase step size (must be positive integer).</param>
-	/// <param name="b_storeData">Whether or not to generate data files (Note: these files tend to be very large).</param>
-	Test(std::vector<double>* lsd, std::size_t ui_dimMin, std::size_t ui_dimMax, std::size_t ui_dimDelta, bool b_storeData);
+	/// <param name="b_storeData">Whether or not to generate data files.</param>
+	/// <param name="ui_generations">Number of generations to run DE/GA.</param>
+	Test(std::size_t ui_dimMin, std::size_t ui_dimMax, std::size_t ui_dimDelta, bool b_storeData, std::size_t ui_generations);
 
 	/// <summary>Destructor. Frees all dynamic memory beloging to this object.</summary>
 	~Test(void);
 
-	/*
-	/// <summary>This function runs the test of the given strategy. The test is run <paramref name="ui_iterations"/> times for each cost function, and each dimension.</summary>
-	/// <typeparam name="F">A callabable type taking <typeparamref name="Args"/> as parameter list.</typeparam>
-	/// <typeparam name="Args">The parameter list for callabable type <typeparamref name="F"/>.</typeparam>
-	/// <param name="f">The optimization strategy for the test (e.g. randomwalk, LS, ILS, etc.)</param>
-	/// <param name="ui_iterations">The number of iterations to run per cost function.</param>
-	/// <param name="args">Argument list passed on to <paramref name="f"/></param>
-	/// <returns>All output is placed into the file(s) named "results_[dimension]_f[function number].csv". Output is only generated if the variable b_storeData is set to true.</returns>
-	/// <remarks>This function is defined here because it is a template.</remarks>
-	
-	template <typename F, typename... Args>
-	void runTest(F f, std::size_t ui_iterations, Args... args)
-	{
-		for (size_t ui_length = ui_minDimensions; ui_length <= ui_maxDimensions; ui_length += ui_dimensionDelta)
-		{
-			vector<results_t> res; // for statistics
+	/// <summary>Runs the given DE strategy to optimize all cost functions.</summary>
+	/// <param name="ui_iterations">Number of iterations to run DE.</param>
+	/// <param name="CR">Crossover rate.</param>
+	/// <param name="strat">DE strategy to use.</param>
+	void RunDE(size_t ui_iterations, double CR, size_t strat);
 
-			for (int i = 0; i < costFunctions.size(); i++)
-			{
-				if (i == i_SHEKEL_INDEX && ui_length > 10) // only execute shekel with 10 dimensions
-				{
-					continue;
-				} // end if
-
-				res.push_back(results_t());
-
-				// pointer to current results
-				results_t * temp = &res.at(i);
-
-				// run each function n times
-				for (size_t j = 0; j < ui_iterations; j++)
-				{
-					compute_start = highRes_Clock::now();
-
-					results_t* temp2 = f(costFunctions[i], ui_length, da_ranges[i][0], da_ranges[i][1], LS_delta.at(i), args...);
-					compute_end = highRes_Clock::now();
-
-					if (temp->d_bestValue > temp2->d_bestValue)
-					{
-						temp->d_bestValue = temp2->d_bestValue;
-						temp->bestValues = temp2->bestValues;
-					} // end if
-
-					time_to_compute = std::chrono::duration_cast<duration>(compute_end - compute_start);
-
-					temp->d_avgTime += time_to_compute.count();
-					temp->d_finalDeltaX += temp2->d_finalDeltaX;
-					temp->ui_functionCalls += temp2->ui_functionCalls;
-
-					if (b_storeData)
-					{
-						dumpDataToFile(makeFileName(ui_length, i), temp2); // dump the data vector to file if user requested it
-					} // end if
-
-					delete temp2;
-				} // end for j
-
-				temp->d_avgTime /= static_cast<double>(ui_iterations); // calculate avg time
-				temp->d_finalDeltaX /= static_cast<double>(ui_iterations); // calculate avg deltaX found
-				temp->ui_functionCalls /= static_cast<double>(ui_iterations); // calculate avg function calls
-
-				writeResultsToFile(temp); // write best point and average time to file
-
-			} // end for i
-
-			if (!b_storeData) // ouput results to stdout if user choses not to use file
-			{
-				int i = 1;
-				for (auto& r : res)
-				{
-					cout << "F" << i << " results: " << endl;
-					cout << r;
-				} // end for
-			} // end if
-		} // end for length
-	} // end template runTest
-	/*/
-
-
-	//*/
-
-	void runTest(void);
+	/// <summary>Runs GA to optimize all cost functions.</summary>
+	/// <param name="ui_iterations">Number of iterations to run DE.</param>
+	/// <param name="MR">Mutation rate.</param>
+	/// <param name="MRg">Mutation Range.</param>
+	/// <param name="MP">Mutation precision.</param>
+	/// <param name="CP">Crossover points.</param>
+	/// <param name="CR">Crossover rate.</param>
+	/// <param name="ER">Elitism rate.</param>
+	void RunGA(size_t ui_iterations, double MR, double MRg, double MP, size_t CP, double CR, double ER);
 
 #pragma region Private
 private:
@@ -129,7 +62,8 @@ private:
 	/// <summary>Dimension info.</summary>
 	std::size_t	ui_minDimensions,
 				ui_maxDimensions,
-				ui_dimensionDelta;
+				ui_dimensionDelta,
+				ui_generations;
 
 	/// <summary>Whether or not to generate data file.</summary>
 	bool b_storeData;
