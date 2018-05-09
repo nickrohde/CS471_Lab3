@@ -3,6 +3,7 @@
 #ifndef _SELECTION_STRAT_H
 #define _SELECTION_STRAT_H
 
+#include "MasterInclude.hpp"
 #include "GA_Population.hpp"
 
 /// <summary>Wrapper class for selection strategies.</summary>

@@ -3,8 +3,7 @@
 #ifndef _FUNCTIONS_H
 #define _FUNCTIONS_H
 
-#include "utility.hpp"
-#include <functional>
+#include "MasterInclude.hpp"
 
 
 /// <summary>Typedef to make cost function type a bit more readable.</summary>

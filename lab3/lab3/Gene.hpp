@@ -3,9 +3,7 @@
 #ifndef _GENE_H
 #define _GENE_H
 
-#include <vector>
-#include <iostream>       // ostream
-#include <functional>     // function
+#include "MasterInclude.hpp"
 #include "utility.hpp"    // RNG
 #include "Containers.hpp" // Offspring, Mutation_Info, Bounds
 
@@ -53,18 +51,12 @@ public:
 
 	/// <summary>Getter for the fitness of the gene.</summary>
 	/// <returns>The fitness of this gene.</returns>
-	inline double fitness(void) const
-	{
-		return d_fitness;
-	} // end methog fitness
+	inline double fitness(void) const {	return d_fitness; } 
 	
 	// Setters:
 	///<summary>Determines the fitness of this gene for the fitness function <paramref name="f"/> and stores it in <see cref="d_fitness"/>.</summary>
 	///<param name="f">The fitness function.</param>
-	void evaluate(fitnessFunction f)
-	{
-		d_fitness = f(&gene);
-	} // end method evaluate
+	void evaluate(fitnessFunction f);
 
 	// Operators:
 	/// <summary>Accessor for the component at index <paramref name="i"/>.</summary>
@@ -145,60 +137,13 @@ private:
 	/// <param name="indeces">The indeces at which recombination can occur.</param>
 	void recombine(const Gene & PARENT_A, const Gene & PARENT_B, const std::vector<size_t>* indeces);
 
-
 }; // end Class Gene
 
-// Relational Operators:
+
 inline bool operator<(const Gene & LHS, const Gene & RHS)
 {
 	return LHS.d_fitness < RHS.d_fitness;
 } // end operator<
-
-
-inline bool operator==(const Gene & LHS, const Gene & RHS)
-{
-	return LHS.d_fitness == RHS.d_fitness;
-} // end operator>
-
-
-/// <summary>Determines if the fitness of gene <paramref name="LHS"/> is less than or equal to that of gene <paramref name="RHS"/>.</summary>
-/// <param name="LHS">The LHS argument.</param>
-/// <param name="RHS">The RHS argument.</param>
-/// <returns>True if the fitness of <paramref name="LHS"/> is less than or equal to that of <paramref name="RHS"/>, otherwise false.</returns>
-inline bool operator<=(const Gene & LHS, const Gene & RHS)
-{
-	return (LHS < RHS || LHS == RHS);
-} // end operator<
-
-
-/// <summary>Determines if the fitness of gene <paramref name="LHS"/> unequal to that of gene <paramref name="RHS"/>.</summary>
-/// <param name="LHS">The LHS argument.</param>
-/// <param name="RHS">The RHS argument.</param>
-/// <returns>True if the fitness of <paramref name="LHS"/> is unequal to that of <paramref name="RHS"/>, otherwise false.</returns>
-inline bool operator!=(const Gene & LHS, const Gene & RHS)
-{
-	return !(LHS == RHS);
-} // end operator>
-
-
-/// <summary>Determines if the fitness of gene <paramref name="LHS"/> is greater than that of gene <paramref name="RHS"/>.</summary>
-/// <param name="LHS">The LHS argument.</param>
-/// <param name="RHS">The RHS argument.</param>
-/// <returns>True if the fitness of <paramref name="LHS"/> is greater than that of <paramref name="RHS"/>, otherwise false.</returns>
-inline bool operator>(const Gene & LHS, const Gene & RHS)
-{
-	return !(RHS <= LHS);
-} // end operator>
-
-
-/// <summary>Determines if the fitness of gene <paramref name="LHS"/> is greater than or equal to that of gene <paramref name="RHS"/>.</summary>
-/// <param name="LHS">The LHS argument.</param>
-/// <param name="RHS">The RHS argument.</param>
-/// <returns>True if the fitness of <paramref name="LHS"/> is greater than or equal to that of <paramref name="RHS"/>, otherwise false.</returns>
-inline bool operator>=(const Gene & LHS, const Gene & RHS)
-{
-	return !(LHS < RHS);
-} // end operator>
 
 
 #endif // !_GENE_H

@@ -1,6 +1,6 @@
-#include "Driver.hpp"
-#include <iostream>
-#include <exception>
+#include "MasterInclude.hpp" // everything that could possibly be needed
+#include "Driver.hpp"		 // Driver class
+
 
 #define DEBUG 0
 

@@ -1,14 +1,10 @@
-#include <iostream>
-#include <sstream>
-#include <cctype>
-#include <fstream>
-#include "GA.hpp"
-#include "DE_Strategies.hpp"
-#include "Driver.hpp"
-#include "IniParser.hpp"
+#include "Driver.hpp"			// class header
+#include "Test.hpp"				// Test class
+#include "GA.hpp"				// GA 
+#include "DE_Strategies.hpp"	// DE
+#include "IniParser.hpp"		// IniParser class
 
 #define _DEBUG 1
-
 
 using namespace std;
 
@@ -107,7 +103,7 @@ void Driver::initialize(const std::string  s_fileName)
 		ui_strat = convertStringToType<size_t>((*parser)("DE", "strategy"));
 
 		d_GA_CR = convertStringToType<double>((*parser)("GA", "cr"));
-		d_GA_CP = convertStringToType<double>((*parser)("GA", "cp"));
+		ui_GA_CP = convertStringToType<size_t>((*parser)("GA", "cp"));
 		d_GA_MR = convertStringToType<double>((*parser)("GA", "mr"));
 		d_GA_MRg = convertStringToType<double>((*parser)("GA", "mrg"));
 		d_GA_MP = convertStringToType<double>((*parser)("GA", "mp"));
@@ -139,8 +135,6 @@ Driver::Driver(void)
 	time_to_compute = std::chrono::duration_cast<duration>(compute_end - compute_start);
 
 	b_invalid = true;
-
-	test = nullptr; // this object is created by run
 } // end Default Constructor
 
 
@@ -239,7 +233,7 @@ int Driver::run(void)
 		return EXIT_FAILURE; // ini file parsing was unsuccessful
 	} // end if
 
-	test = new Test(ui_startDim, ui_endDim, ui_dimDelta, b_storeData, ui_generations);
+	Test* test = new Test(ui_startDim, ui_endDim, ui_dimDelta, b_storeData, ui_generations);
 
 	do
 	{
@@ -254,7 +248,7 @@ int Driver::run(void)
 
 			compute_start = highRes_Clock::now(); // start timer for whole run
 
-			test->RunGA(ui_iterations,d_GA_MR,d_GA_MRg,d_GA_MP,d_GA_CP,d_GA_CR,d_ER);
+			test->RunGA(ui_iterations,d_GA_MR,d_GA_MRg,d_GA_MP,ui_GA_CP,d_GA_CR,d_ER);
 
 			compute_end = highRes_Clock::now();
 			time_to_compute = std::chrono::duration_cast<duration>(compute_end - compute_start);

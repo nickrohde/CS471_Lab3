@@ -1,4 +1,4 @@
-#include "GA_Population.hpp"
+#include "GA_Population.hpp" // class header
 
 using namespace std;
 
@@ -6,8 +6,18 @@ GA_Population::GA_Population(const GA_Population & other) : Population(other)
 {
 	this->d_totalFitness = other.d_totalFitness;
 	this->probabilities = other.probabilities;
-	this->b_isSorted = other.b_isSorted;
 } // end Copy Constructor
+
+
+void GA_Population::evaluateAll(fitnessFunction f)
+{
+	b_isSorted = false;
+
+	for (auto& g : genes)
+	{
+		g.evaluate(f);
+	} // end for
+} // end method evaluateAll
 
 
 void GA_Population::findProbabilities(fitnessFunction f)

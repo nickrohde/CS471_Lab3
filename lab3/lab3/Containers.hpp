@@ -3,7 +3,7 @@
 #ifndef _CONTAINER_H
 #define _CONTAINER_H
 
-#include <vector>
+#include "MasterInclude.hpp"
 
 class Gene; // let the compiler know the class Gene exists
 

@@ -3,10 +3,11 @@
 #ifndef _DE_STRATS_H
 #define _DE_STRATS_H
 
-#include "DE_Population.hpp"
+#include "MasterInclude.hpp"
 #include "results.hpp"
-#include <functional>
-
+#include "Containers.hpp"
+#include "Gene.hpp"
+#include "DE_Population.hpp"
 
 
 ///<summary>Improves readibility of mutation strategy functions.</summary>
@@ -148,7 +149,7 @@ public:
 	/// <param name="r2">Random index.</param>
 	/// <returns>The value of <paramref name="j"/>th component of the best member of <paramref name="POP"/>.</returns>
 	static inline double strat3(DE_Population& POP, double F, double lambda, std::size_t j, std::size_t i, std::size_t r1, std::size_t r2);
-};
+}; // end Class DE_Strategies
 
 
 #endif // !_DE_STRATS_H

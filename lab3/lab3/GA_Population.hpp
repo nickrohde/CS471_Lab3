@@ -3,6 +3,7 @@
 #ifndef _GA_POP_H
 #define _GA_POP_H
 
+#include "MasterInclude.hpp"
 #include "Population.hpp"
 
 ///<summary><see cref="Population"/> specific to Genetic Algorithm.</summary>
@@ -27,23 +28,12 @@ public:
 
 	// Destructor:
 	/// <summary>Releases all dynamic memory owned by this object.</summary>
-	~GA_Population(void)
-	{
-		probabilities.clear();
-	}
+	~GA_Population(void) {	probabilities.clear(); } 
 
 	// Operations:
 	/// <summary>Finds the fitness of all members of the population and calculates the total fitness of the population.</summary>
 	/// <param name="f">The fitness function to evaluate the population on.</param>
-	virtual void evaluateAll(fitnessFunction f)
-	{
-		b_isSorted = false;
-
-		for (auto& g : genes)
-		{
-			g.evaluate(f);
-		} // end for
-	} // end method evaluateAll
+	virtual void evaluateAll(fitnessFunction f);
 
 	/// <summary>Determines the propability distribution for this population by mapping the fitness values into the positive reals.</summary>
 	/// <param name="f">The fitness function to base the probabilities on.</param>
@@ -62,12 +52,6 @@ public:
 	/// <remarks>All genes to be added must be compatible, i.e. of the same length as the genes already in this population.</remarks>
 	/// <exception name="std::invalid_argument">Thrown if any gene in <paramref name="newGenes"/> is not the same length as all other genes in this population.</exception>
 	friend GA_Population& operator<<(GA_Population& pop, const Offspring* newGenes);
-
-	// <summary>Adds the gene <paramref name="newGene"/> to this population.</summary>
-	// <param name="newGene">The new gene that will be added to this population.</param>
-	// <remarks>The gene to be added must be compatible, i.e. of the same length as the genes already in this population.</remarks>
-	// <exception name="std::invalid_argument">Thrown if <paramref name="newGene"/> is not the same length as all other genes in this population.</exception>
-	//friend GA_Population& operator<<(GA_Population& pop, const Gene* newGene);
 
 private:
 	// Private Data Members:

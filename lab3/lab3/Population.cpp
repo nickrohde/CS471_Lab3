@@ -1,4 +1,4 @@
-#include "Population.hpp"
+#include "Population.hpp" // class header
 
 using namespace std;
 
@@ -22,6 +22,16 @@ Population::Population(const size_t ui_SIZE, const size_t ui_DIM, const Bounds& 
 		genes[i] = Gene(ui_DIM, BOUNDS);
 	} // end for
 } // end Constructor 4
+
+void Population::sort(void)
+{
+	if (!b_isSorted) // only sort if needed
+	{
+		b_isSorted = true;
+
+		vector_quickSort(genes.begin(), genes.end());
+	} // end if
+} // end method sort
 
 
 Population::Population(const Population & other)

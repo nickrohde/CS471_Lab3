@@ -1,9 +1,4 @@
-#include "IniParser.hpp"
-#include <list>
-#include <iostream>
-#include <fstream>
-#include <stdlib.h>
-#include <sstream>
+#include "IniParser.hpp" // class header
 
 using namespace std;
 

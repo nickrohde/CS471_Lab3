@@ -3,6 +3,7 @@
 #ifndef _GENETIC_ALG_H
 #define _GENETIC_ALG_H
 
+#include "MasterInclude.hpp"
 #include "GA_Population.hpp"
 #include "results.hpp"
 

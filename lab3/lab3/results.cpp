@@ -1,5 +1,5 @@
-#include "results.hpp"
-#include <limits>    // numeric_limits
+#include "results.hpp" // class header
+
 
 using namespace std;
 

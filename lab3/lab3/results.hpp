@@ -3,8 +3,7 @@
 #ifndef _RESULTS_H
 #define _RESULTS_H
 
-#include <vector>    // vector<T>
-#include <iostream>  // ostream
+#include "MasterInclude.hpp"
 #include "Gene.hpp"  // Gene
 
 /// <summary>Storage class for results.</summary>

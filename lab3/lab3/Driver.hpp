@@ -3,9 +3,7 @@
 #ifndef _DRIVER_H
 #define _DRIVER_H
 
-
-#include <string>
-#include "Test.hpp"
+#include "MasterInclude.hpp"
 
 typedef std::chrono::high_resolution_clock::time_point timePoint;
 typedef std::chrono::duration<double> duration;
@@ -65,6 +63,7 @@ private:
 			ui_startDim,
 			ui_endDim,
 			ui_dimDelta,
+			ui_GA_CP,
 			ui_strat;
 
 	/// <summary>Parameter extracted from the .ini file.</summary>
@@ -79,7 +78,6 @@ private:
 			d_DE_CR,
 			d_DE_MR,
 			d_GA_CR,
-			d_GA_CP,
 			d_GA_MR,
 			d_GA_MRg,
 			d_GA_MP;
@@ -88,9 +86,6 @@ private:
 	timePoint	compute_start,
 				compute_end;
 	duration	time_to_compute;
-
-	/// <summary>A test object, this pointer is managed by the run function.</summary>
-	Test* test;
 
 	/// <summary>Displays the main menu to the user.</summary>
 	void presentMenu(void);

@@ -2,10 +2,10 @@
 
 #ifndef _TEST_H
 #define _TEST_H
-#include <initializer_list> // variadic template
-#include "functions.hpp"    // cost functions
-#include "Containers.hpp"
-#include "results.hpp"
+
+#include "MasterInclude.hpp"
+#include "Containers.hpp"		// GA/DE structs
+#include "results.hpp"			// results_t
 
 #define SHEKEL_OUTER_SIZE 30 // size of outer array used by shekel's foxholes
 #define SHEKEL_INNER_SIZE 10 // size of inner array used by shekel's foxholes

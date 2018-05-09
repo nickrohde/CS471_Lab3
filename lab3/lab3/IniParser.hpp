@@ -1,7 +1,6 @@
 #pragma once
 
-#include <string>
-#include <map>
+#include "MasterInclude.hpp"
 
 /// <summary>Parser for .ini files.</summary>
 class IniParser

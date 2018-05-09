@@ -3,9 +3,9 @@
 #ifndef _POPULATION_H
 #define _POPULATION_H
 
-#include <vector>
+#include "MasterInclude.hpp"
 #include "Gene.hpp" // Gene, Bounds
-#include <algorithm>
+
 
 typedef std::vector<Gene> GenePool;
 
@@ -29,25 +29,15 @@ public:
 
 	// Destructor:
 	/// <summary>Releases all dynamic memory owned by this object.</summary>
-	~Population(void)
-	{
-		genes.clear();
-	}
+	~Population(void){	genes.clear();	}
 
 	// Operations:
 	/// <summary>Sorts this population in ascending order if it isn't already sorted.</summary>
-	void sort(void)
-	{
-		if (!b_isSorted) // only sort if needed
-		{
-			b_isSorted = true;
-
-			vector_quickSort(genes.begin(), genes.end());
-		} // end if
-	} // end method sort
+	void sort(void);
 
 	/// <summary>Evaluates the fitness of all members of the population.</summary>
 	virtual void evaluateAll(fitnessFunction f) = 0;
+
 
 	// Getters:
 	/// <summary>Getter for the size of the population.</summary>

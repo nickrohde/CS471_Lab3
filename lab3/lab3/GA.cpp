@@ -1,5 +1,5 @@
-#include "GA.hpp"
-#include "SelectionStrategy.hpp"
+#include "GA.hpp"				 // class header
+#include "SelectionStrategy.hpp" // SelectionStrategy class
 
 using namespace std;
 

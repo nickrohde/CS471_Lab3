@@ -4,12 +4,7 @@
 #define _UTILITY_H
 
 #pragma region Includes
-#include <vector>
-#include <random>
-#include <algorithm>
-#include <chrono>
-#include <limits>
-#include <iterator>
+#include "MasterInclude.hpp"
 #pragma endregion
 
 

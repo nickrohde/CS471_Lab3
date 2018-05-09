@@ -1,5 +1,4 @@
-#include "Containers.hpp"
-#include <stdexcept>
+#include "Containers.hpp" // class header
 
 using namespace std;
 

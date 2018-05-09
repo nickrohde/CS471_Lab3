@@ -1,8 +1,10 @@
-#include "SelectionStrategy.hpp"
+#include "SelectionStrategy.hpp" // class header
 
 using namespace std;
 
+
 typedef function<size_t(const GA_Population&)> StrategyFunction;
+
 
 Parents* SelectionStrategy::selectParents(const GA_Population& pop, StrategyType t)
 {

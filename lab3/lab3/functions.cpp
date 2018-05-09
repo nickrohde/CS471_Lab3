@@ -1,7 +1,5 @@
-#include "functions.hpp"
-#include <cmath>
-#include <cstdarg>
-
+#include "functions.hpp" // class header
+#include "utility.hpp"	 // math defines
 
 inline double schwefelsFunction(const std::vector<double>* vect)
 {

@@ -3,6 +3,7 @@
 #ifndef _DE_POP_H
 #define _DE_POP_H
 
+#include "MasterInclude.hpp"
 #include "Population.hpp"
 
 ///<summary><see cref="Population"/> specific to Differential Evolution.</summary>
@@ -21,7 +22,7 @@ public:
 
 	/// <summary>Constructs a new population that is a copy of the population <paramref name="other"/>.</summary>
 	/// <param name="other">The population to copy.</param>
-	DE_Population(const DE_Population& other);
+	DE_Population(const DE_Population& other) : Population(other) {}
 
 	// Destructor:
 	/// <summary>Releases all dynamic memory owned by this object.</summary>
@@ -30,16 +31,10 @@ public:
 	// Operations: 
 	/// <summary>Finds the fitness of all members of the population.</summary>
 	/// <param name="f">The fitness function to evaluate the population on.</param>
-	virtual void evaluateAll(fitnessFunction f)
-	{
-		b_isSorted = false;
+	virtual void evaluateAll(fitnessFunction f);
 
-		for (auto& g : genes)
-		{
-			g.evaluate(f);
-		} // end for
-	} // end method evaluateAll
-
+	///<summary>Getter for best member of population.</summary>
+	///<returns>The best member of the population.</returns>
 	Gene* best(void);
 
 

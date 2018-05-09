@@ -1,4 +1,4 @@
-#include "DE_Strategies.hpp"
+#include "DE_Strategies.hpp"	// class header
 
 using namespace std;
 

@@ -1,9 +1,8 @@
-#include <fstream>
-#include <sstream>
-#include "Test.hpp"
-#include <omp.h>
-#include "GA.hpp"
-#include "DE_Strategies.hpp"
+#include "Test.hpp"				// class header
+#include "functions.hpp"		// cost functions
+#include "GA.hpp"				// GA
+#include "DE_Strategies.hpp"	// DE
+
 
 #define NUM_THREADS 16
 
