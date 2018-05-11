@@ -88,25 +88,25 @@ void Driver::initialize(const std::string  s_fileName)
 	try
 	{
 		// extract data from .ini file
-		ui_startDim = convertStringToType<size_t>((*parser)("DIM", "min"));   // smallest dimension to test
-		ui_endDim = convertStringToType<size_t>((*parser)("DIM", "max"));   // largest dimension to test
-		ui_dimDelta = convertStringToType<size_t>((*parser)("DIM", "delta")); // dimension increase
+		ui_startDim = parser->getKeyAs<size_t>("DIM", "min");   // smallest dimension to test
+		ui_endDim = parser->getKeyAs<size_t>("DIM", "max");   // largest dimension to test
+		ui_dimDelta = parser->getKeyAs<size_t>("DIM", "delta"); // dimension increase
 
-		ui_iterations = convertStringToType<size_t>((*parser)("TEST", "num_test_itrs"));
-		b_storeData = convertStringToType<bool>((*parser)("TEST", "store_data"));
+		ui_iterations = parser->getKeyAs<size_t>("TEST", "num_test_itrs");
+		b_storeData = parser->getKeyAs<bool>("TEST", "store_data");
 
-		ui_generations = convertStringToType<size_t>((*parser)("POP", "generations"));
-		d_ER = convertStringToType<double>((*parser)("POP", "er"));
+		ui_generations = parser->getKeyAs<size_t>("POP", "generations");
+		d_ER = parser->getKeyAs<double>("POP", "er");
 
-		d_DE_CR = convertStringToType<double>((*parser)("DE", "cr"));
-		d_DE_MR = convertStringToType<double>((*parser)("DE", "mr"));
-		ui_strat = convertStringToType<size_t>((*parser)("DE", "strategy"));
+		d_DE_CR = parser->getKeyAs<double>("DE", "cr");
+		d_DE_MR = parser->getKeyAs<double>("DE", "mr");
+		ui_strat = parser->getKeyAs<size_t>("DE", "strategy");
 
-		d_GA_CR = convertStringToType<double>((*parser)("GA", "cr"));
-		ui_GA_CP = convertStringToType<size_t>((*parser)("GA", "cp"));
-		d_GA_MR = convertStringToType<double>((*parser)("GA", "mr"));
-		d_GA_MRg = convertStringToType<double>((*parser)("GA", "mrg"));
-		d_GA_MP = convertStringToType<double>((*parser)("GA", "mp"));
+		d_GA_CR = parser->getKeyAs<double>("GA", "cr");
+		ui_GA_CP = parser->getKeyAs<size_t>("GA", "cp");
+		d_GA_MR = parser->getKeyAs<double>("GA", "mr");
+		d_GA_MRg = parser->getKeyAs<double>("GA", "mrg");
+		d_GA_MP = parser->getKeyAs<double>("GA", "mp");
 		
 	} // end try
 	catch (invalid_argument e)
